@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="0.0">bsoft.com.clipboard.model.Destination</node>
+    <node x="0.0" y="444.0">bsoft.com.clipboard.model.RegistrationTicket</node>
+    <node x="201.0" y="294.0">bsoft.com.clipboard.model.Clipboard</node>
+    <node x="237.0" y="444.0">bsoft.com.clipboard.model.User</node>
+    <node x="293.0" y="0.0">bsoft.com.clipboard.model.ClipTopic</node>
+    <node x="0.0" y="294.0">bsoft.com.clipboard.model.Message</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="442.0" y="734.0" />
+  <SelectedNodes>
+    <node>bsoft.com.clipboard.model.RegistrationTicket</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  prometheus:
+    image: "prom/prometheus"
+    ports:
+      - "9090:9090"
+  rabbit:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
