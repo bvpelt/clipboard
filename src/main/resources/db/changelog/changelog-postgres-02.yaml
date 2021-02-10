@@ -1,0 +1,17 @@
+databaseChangeLog:
+- changeSet:
+    id:  200
+    author:  bart
+    dbms: PostgreSQL
+    comment: Create user email index
+    changes:
+      - createIndex:
+          clustered:  true
+          columns:
+            - column:
+                descending:  true
+                name:  EMAIL
+          indexName:  idx_email
+          schemaName:  public
+          tableName:  clipuser
+          unique:  true

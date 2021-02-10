@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 100
+      author: bart
+      dbms: PostgreSQL
+      comment: Create User
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: clipuser
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: NAME
+                  type: varchar(24)
+              - column:
+                  name: EMAIL
+                  type: varchar(128)
+              - column:
+                  name: ENDPOINT
+                  type: varchar(128)
+              - column:
+                  name: STATUS
+                  type: varchar(24)
+              - column:
+                  name: REGISTRATIONTICKET_ID
+                  type: BIGINT
+        - rollback:
+            dropTable:
+              - tableName: USER
+  - changeSet:
+      id: 110
+      author: bart
+      dbms: PostgreSQL
+      comment: Create RegistrationTicket
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: registrationticket
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: USERTICKET
+                  type: varchar(48)
+        - rollback:
+            dropTable:
+              - tableName: REGISTRATIONTICKET

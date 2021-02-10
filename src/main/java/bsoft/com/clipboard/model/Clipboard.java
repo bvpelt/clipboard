@@ -1,21 +1,43 @@
 package bsoft.com.clipboard.model;
 
-import lombok.AllArgsConstructor;
+import bsoft.com.clipboard.repositories.RegistrationTicketRepository;
+import bsoft.com.clipboard.repositories.UserRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@Component
 @Getter
 @Setter
 @NoArgsConstructor
 public class Clipboard {
 
-    public RegistrationTicket registerUser(final User user) {
-        RegistrationTicket registrationTicket = null;
+    private UserRepository userRepository;
+    private RegistrationTicketRepository registrationTicketRepository;
 
-        String newUserTicket = UUID.randomUUID().toString();
+    @Autowired
+    public Clipboard(final UserRepository userRepository,
+                     final RegistrationTicketRepository registrationTicketRepository) {
+        this.userRepository = userRepository;
+        this.registrationTicketRepository = registrationTicketRepository;
+    }
+
+    @Transactional
+    public List<User> getUsers() {
+        List<User> users = userRepository.findAll();
+        return users;
+    }
+
+    @Transactional
+    public RegistrationTicket registerUser(final User user) {
+        RegistrationTicket registrationTicket = new RegistrationTicket();
 
         // Check if
         // - the user exists by checking email adres
@@ -24,10 +46,24 @@ public class Clipboard {
         // else
         // - return registration ticket
 
-        registrationTicket = new RegistrationTicket();
-        registrationTicket.setStatus("ok");
-        registrationTicket.setUserTicket(newUserTicket);
 
+        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+
+        if ((optionalUser != null) && optionalUser.isPresent()) {
+            // return error
+            registrationTicket.setStatus("error");
+            registrationTicket.setErrorMessage("User already exists");
+        } else {
+            String newUserTicket = UUID.randomUUID().toString();
+            registrationTicket.setStatus("ok");
+            registrationTicket.setUserTicket(newUserTicket);
+
+            registrationTicketRepository.save(registrationTicket);
+
+            user.setStatus("create");
+            user.setRegistrationTicket(registrationTicket);
+            userRepository.save(user);
+        }
         return registrationTicket;
     }
 

@@ -19,9 +19,14 @@ Using a docker image to start rabbitmq
 ```
 
 ## Docker compose
-Goto <root>/docs directory
+Goto <root>/docs directory if first time
 ```shell
 # docker-compose up
+```
+
+if not first time
+```shell
+# docker-compose start
 ```
 
 ## References
