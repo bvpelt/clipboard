@@ -11,6 +11,10 @@ Purpose:
 - Once the message is posted to the topic it is distributed to all interested readers
 
 # RabbitMQ
+
+# Multimodule project
+https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
+
 ## Docker
 Using a docker image to start rabbitmq
 ```shell
