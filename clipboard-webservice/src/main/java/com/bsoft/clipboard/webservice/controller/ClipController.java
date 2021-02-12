@@ -27,7 +27,7 @@ public class ClipController {
         this.clipboard = clipboard;
     }
 
-    @RequestMapping(value = "/users", method=RequestMethod.GET)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<UserList> registeredUsers() {
         ResponseEntity<UserList> userResponse = null;
         List<User> users = null;
@@ -43,7 +43,7 @@ public class ClipController {
     }
 
 
-    @RequestMapping(value = "/registeruser", method=RequestMethod.POST)
+    @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public ResponseEntity<RegistrationTicket> registerUser(@RequestBody User user) {
         log.info("ClipController received request for /registeruser with user - name: {}, endpoint: {}", user.getName(), user.getEndpoint());
         ResponseEntity<RegistrationTicket> registrationTicketResponseEntity = null;

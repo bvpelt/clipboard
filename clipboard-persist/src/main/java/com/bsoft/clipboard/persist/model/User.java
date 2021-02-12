@@ -25,7 +25,7 @@ public class User {
     @Column(name = "ENDPOINT")
     private String endpoint;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @Column(name = "STATUS")
     private String status;   // possible values [ created, confirmed, disabled, removed ]
 
