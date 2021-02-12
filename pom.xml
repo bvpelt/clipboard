@@ -8,18 +8,71 @@
 		<version>2.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>bsoft.com</groupId>
+
+	<groupId>com.bsoft</groupId>
 	<artifactId>clipboard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>clipboard</name>
-	<description>Demo project for Spring Boot</description>
+	<packaging>pom</packaging>
+	<name>Clipboard</name>
+	<description>Clipboard</description>
+
+	<modules>
+		<module>clipboard-application</module>
+		<module>clipboard-persist</module>
+		<module>clipboard-webservice</module>
+	</modules>
 
 	<properties>
 		<java.version>11</java.version>
-		<liquibase.version>4.2.2</liquibase.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<spring.boot.version>2.4.2</spring.boot.version>
+		<lombok.version>1.18.18</lombok.version>
+		<!--
+				<liquibase.version>4.2.2</liquibase.version>
+				-->
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.bsoft</groupId>
+				<artifactId>clipboard-webservice</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.bsoft</groupId>
+				<artifactId>clipboard-persist</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+
+			<!--Spring boot-->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-json</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -41,13 +94,15 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
+-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -59,44 +114,55 @@
 			<version>${liquibase.version}</version>
 		</dependency>
 
-		<!-- Hibernate  -->
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Micormeter core dependecy -->
+
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-core</artifactId>
 			<version>${micrometer.version}</version>
 		</dependency>
-		<!-- Micrometer Prometheus registry -->
+
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 			<version>${micrometer.version}</version>
 		</dependency>
-
+-->
+		<dependency>
+			<!-- For @Configuration and such -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 
+		<!--
 		<dependency>
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		-->
 	</dependencies>
 
+	<!--
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${spring.boot.version}</version>
+
 				<configuration>
 					<excludes>
 						<exclude>
@@ -105,8 +171,55 @@
 						</exclude>
 					</excludes>
 				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+-->
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/libs
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>
+				<archive>
+					<manifest>
+						<addClasspath>true</addClasspath>
+						<classpathPrefix>libs/</classpathPrefix>
+						<mainClass>
+							com.bsoft.clipboard.application.ClipboardApplication
+						</mainClass>
+					</manifest>
+				</archive>
+			</configuration>
+		</plugin>
+		</plugins>
+	</build>
 </project>
