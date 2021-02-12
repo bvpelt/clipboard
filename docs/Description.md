@@ -13,7 +13,8 @@ Purpose:
 # RabbitMQ
 
 # Multimodule project
-https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
+- https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
+- https://blog.avraampiperidis.com/dependency-management-and-versioning-with-a-maven-multi-module-project/
 
 ## Docker
 Using a docker image to start rabbitmq
