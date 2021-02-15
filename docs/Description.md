@@ -15,10 +15,12 @@ Purpose:
 # RabbitMQ
 
 # Startup
+
 ```shell
  java -classpath target/lib -jar clipboard-application/target/clipboard-application-0.0.1-SNAPSHOT.jar                   
  
 ```
+
 # Multimodule project
 
 https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
@@ -50,5 +52,7 @@ if not first time
 
 - see [Rabbit MQ Tutorial](https://www.rabbitmq.com/tutorials/tutorial-three-java.html)
 -
+
 see [Article link from Tony Sloos](http://itsystemengineer.blogspot.com/2018/02/java-ee-7-startup-singleton-rabbitmq.html)
+
 - see [API spec inspiration](https://cloud.google.com/pubsub?hl=nl)
