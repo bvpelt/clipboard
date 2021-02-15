@@ -1,9 +1,9 @@
-package com.bsoft.clipboard.webservice.controller;
-
+package com.bsoft.clipboard.web;
 
 import com.bsoft.clipboard.persist.model.RegistrationTicket;
 import com.bsoft.clipboard.persist.model.User;
 import com.bsoft.clipboard.persist.model.UserList;
+import com.bsoft.clipboard.service.Clipboard;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ClipController {
         this.clipboard = clipboard;
     }
 
-    @RequestMapping(value = "/users", method=RequestMethod.GET)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<UserList> registeredUsers() {
         ResponseEntity<UserList> userResponse = null;
         List<User> users = null;
@@ -43,9 +43,9 @@ public class ClipController {
     }
 
 
-    @RequestMapping(value = "/registeruser", method=RequestMethod.POST)
+    @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public ResponseEntity<RegistrationTicket> registerUser(@RequestBody User user) {
-        log.info("ClipController received request for /registeruser with user - name: {}, endpoint: {}", user.getName(), user.getEndpoint());
+        log.info("com.bsoft.clipboard.web.ClipController received request for /registeruser with user - name: {}, endpoint: {}", user.getName(), user.getEndpoint());
         ResponseEntity<RegistrationTicket> registrationTicketResponseEntity = null;
         RegistrationTicket registrationTicket = null;
 
@@ -53,15 +53,15 @@ public class ClipController {
         boolean valid = true;
 
         if (user.getEmail() == null || ((user.getEmail() != null) && user.getEmail().length() == 0)) {
-            log.warn("ClipController invalid input, no email for user: {}", user);
+            log.warn("com.bsoft.clipboard.web.ClipController invalid input, no email for user: {}", user);
             valid = false;
         }
         if (user.getEndpoint() == null || ((user.getEndpoint() != null) && user.getEndpoint().length() == 0)) {
-            log.warn("ClipController invalid input, no endpoint for user: {}", user);
+            log.warn("com.bsoft.clipboard.web.ClipController invalid input, no endpoint for user: {}", user);
             valid = false;
         }
         if (user.getName() == null || ((user.getName() != null) && user.getName().length() == 0)) {
-            log.warn("ClipController invalid input, no name for user: {}", user);
+            log.warn("com.bsoft.clipboard.web.ClipController invalid input, no name for user: {}", user);
             valid = false;
         }
 
@@ -71,7 +71,7 @@ public class ClipController {
             registrationTicket = clipboard.registerUser(user);
 
             registrationTicketResponseEntity = ResponseEntity.ok(registrationTicket);
-            log.debug("ClipController registered user");
+            log.debug("com.bsoft.clipboard.web.ClipController registered user");
         } else {
             registrationTicket = new RegistrationTicket();
             registrationTicket.setErrorMessage("Input does not conform to requirements");

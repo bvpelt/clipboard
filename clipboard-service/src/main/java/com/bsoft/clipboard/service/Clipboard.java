@@ -1,4 +1,4 @@
-package com.bsoft.clipboard.webservice.controller;
+package com.bsoft.clipboard.service;
 
 
 import com.bsoft.clipboard.persist.model.ClipTopic;

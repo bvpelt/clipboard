@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class UserList {
-    User [] users;
+    User[] users;
 }
