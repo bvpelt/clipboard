@@ -14,6 +14,11 @@ Purpose:
 
 # RabbitMQ
 
+# Startup
+```shell
+ java -classpath target/lib -jar clipboard-application/target/clipboard-application-0.0.1-SNAPSHOT.jar                   
+ 
+```
 # Multimodule project
 
 https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
