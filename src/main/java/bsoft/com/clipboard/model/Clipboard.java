@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -31,8 +32,43 @@ public class Clipboard {
 
     @Transactional
     public List<User> getUsers() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAll(Sort.by("email"));
+
         return users;
+    }
+
+    @Transactional
+    public Optional<User> getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user;
+    }
+
+    @Transactional
+    public Optional<User> confirmUser(Long userId) {
+        Optional<User> user = updateUserStatus(userId, "confirmed");
+        return user;
+    }
+
+    @Transactional
+    public Optional<User> disableUser(Long userId) {
+        Optional<User> user = updateUserStatus(userId, "disabled");
+        return user;
+    }
+
+    @Transactional
+    public Optional<User> removeUser(Long userId) {
+        Optional<User> user = updateUserStatus(userId, "removed");
+        return user;
+    }
+
+    private Optional<User> updateUserStatus(Long userId, final String status) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            User user1 = user.get();
+            user1.setStatus(status);
+            userRepository.save(user1);
+        }
+        return user;
     }
 
     @Transactional

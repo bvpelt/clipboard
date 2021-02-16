@@ -16,6 +16,9 @@ Purpose:
 - https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
 - https://blog.avraampiperidis.com/dependency-management-and-versioning-with-a-maven-multi-module-project/
 
+# Openapi
+See https://www.baeldung.com/spring-rest-openapi-documentation
+
 ## Docker
 Using a docker image to start rabbitmq
 ```shell

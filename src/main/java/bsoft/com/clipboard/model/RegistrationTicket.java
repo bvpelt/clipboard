@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 
 @Data
@@ -23,6 +24,7 @@ public class RegistrationTicket {
     @Transient
     private String status;
 
+    @Size(min=0, max=48)
     @Column(name = "USERTICKET")
     private String userTicket;
 

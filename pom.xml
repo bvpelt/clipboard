@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<liquibase.version>4.2.2</liquibase.version>
+		<openapitools.version>4.3.0</openapitools.version>
 	</properties>
 
 	<dependencies>
@@ -79,6 +80,13 @@
 			<version>${micrometer.version}</version>
 		</dependency>
 
+		<!-- Open API -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -106,6 +114,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
