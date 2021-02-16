@@ -13,17 +13,25 @@
     <description>Clipboard - web</description>
 
     <dependencies>
+        <!-- clipboard -->
         <dependency>
             <groupId>com.bsoft</groupId>
             <artifactId>clipboard-service</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- springboot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
     </dependencies>
 
 
