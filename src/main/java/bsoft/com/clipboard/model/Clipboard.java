@@ -1,5 +1,6 @@
 package bsoft.com.clipboard.model;
 
+import bsoft.com.clipboard.repositories.ClipTopicRepository;
 import bsoft.com.clipboard.repositories.RegistrationTicketRepository;
 import bsoft.com.clipboard.repositories.UserRepository;
 import lombok.Getter;
@@ -22,12 +23,15 @@ public class Clipboard {
 
     private UserRepository userRepository;
     private RegistrationTicketRepository registrationTicketRepository;
+    private ClipTopicRepository clipTopicRepository;
 
     @Autowired
     public Clipboard(final UserRepository userRepository,
-                     final RegistrationTicketRepository registrationTicketRepository) {
+                     final RegistrationTicketRepository registrationTicketRepository,
+                     final ClipTopicRepository clipTopicRepository) {
         this.userRepository = userRepository;
         this.registrationTicketRepository = registrationTicketRepository;
+        this.clipTopicRepository = clipTopicRepository;
     }
 
     @Transactional
@@ -103,9 +107,10 @@ public class Clipboard {
         return registrationTicket;
     }
 
-    public TopicTicket defineClipTopic(final ClipTopic clipTopic) {
-        TopicTicket topicTicket = null;
+    public ClipTopic registerClipTopic(final ClipTopic clipTopic) {
 
-        return topicTicket;
+        ClipTopic registeredClipTopic;
+        registeredClipTopic = clipTopicRepository.save(clipTopic);
+        return registeredClipTopic;
     }
 }

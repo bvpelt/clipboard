@@ -1,0 +1,27 @@
+databaseChangeLog:
+    - changeSet:
+          id: 300
+          author: bart
+          dbms: PostgreSQL
+          comment: Create ClipTopic
+          changes:
+              - createTable:
+                    schemaName: public
+                    tableName: cliptopic
+                    columns:
+                        - column:
+                              name: ID
+                              type: BIGINT
+                              autoIncrement: true
+                              constraints:
+                                  primaryKey: true
+                                  nullable: false
+                        - column:
+                              name: NAME
+                              type: varchar(24)
+                        - column:
+                              name: DESCRIPTION
+                              type: varchar(128)
+              - rollback:
+                    dropTable:
+                        - tableName: cliptopic

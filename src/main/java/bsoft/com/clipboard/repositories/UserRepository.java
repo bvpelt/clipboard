@@ -2,6 +2,7 @@ package bsoft.com.clipboard.repositories;
 
 import bsoft.com.clipboard.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 

@@ -1,9 +1,6 @@
 package bsoft.com.clipboard.controller;
 
-import bsoft.com.clipboard.model.Clipboard;
-import bsoft.com.clipboard.model.RegistrationTicket;
-import bsoft.com.clipboard.model.User;
-import bsoft.com.clipboard.model.UserList;
+import bsoft.com.clipboard.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +29,13 @@ public class ClipController {
         this.clipboard = clipboard;
     }
 
+    @Operation(summary = "Get all known users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found users",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserList.class)) }),
+            @ApiResponse(responseCode = "404", description = "No users found",
+                    content = @Content) })
     @RequestMapping(value = "/users", method=RequestMethod.GET)
     public ResponseEntity<UserList> users() {
         ResponseEntity<UserList> userResponse = null;
@@ -67,11 +71,20 @@ public class ClipController {
             userResponse = ResponseEntity.ok(user.get());
         } else {
             //userResponse = ResponseEntity.notFound().build();
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("User not found");
         }
         return userResponse;
     }
 
+    @Operation(summary = "Change status of user to confirmed")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Changed status to confirmed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content) })
     @RequestMapping(value = "/users/{id}/confirm", method=RequestMethod.PUT)
     public ResponseEntity<User> updateUserStatusById(@PathVariable Long id) {
         ResponseEntity<User> userResponse = null;
@@ -82,11 +95,21 @@ public class ClipController {
         if (user.isPresent()) {
             userResponse = ResponseEntity.ok(user.get());
         } else {
-            userResponse = ResponseEntity.notFound().build();
+            //userResponse = ResponseEntity.notFound().build();
+            throw new UserNotFoundException("User not found");
         }
         return userResponse;
     }
 
+    @Operation(summary = "Change status of user to disabled")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Changed status to disabled",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content) })
     @RequestMapping(value = "/users/{id}/disabled", method=RequestMethod.PUT)
     public ResponseEntity<User> disableUserStatusById(@PathVariable Long id) {
         ResponseEntity<User> userResponse = null;
@@ -97,11 +120,21 @@ public class ClipController {
         if (user.isPresent()) {
             userResponse = ResponseEntity.ok(user.get());
         } else {
-            userResponse = ResponseEntity.notFound().build();
+            //userResponse = ResponseEntity.notFound().build();
+            throw new UserNotFoundException("User not found");
         }
         return userResponse;
     }
 
+    @Operation(summary = "Change status of user to removed")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Changed status to removed",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content) })
     @RequestMapping(value = "/users/{id}/removed", method=RequestMethod.PUT)
     public ResponseEntity<User> removeUserStatusById(@PathVariable Long id) {
         ResponseEntity<User> userResponse = null;
@@ -112,11 +145,19 @@ public class ClipController {
         if (user.isPresent()) {
             userResponse = ResponseEntity.ok(user.get());
         } else {
-            userResponse = ResponseEntity.notFound().build();
+            //userResponse = ResponseEntity.notFound().build();
+            throw new UserNotFoundException("User not found");
         }
         return userResponse;
     }
 
+    @Operation(summary = "Register new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "New user is registered",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RegistrationTicket.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad parameters",
+                    content = @Content) })
     @RequestMapping(value = "/registeruser", method=RequestMethod.POST)
     public ResponseEntity<RegistrationTicket> registerUser(@RequestBody User user) {
         log.info("ClipController received request for /registeruser with user - name: {}, endpoint: {}", user.getName(), user.getEndpoint());
@@ -147,12 +188,36 @@ public class ClipController {
             registrationTicketResponseEntity = ResponseEntity.ok(registrationTicket);
             log.debug("ClipController registered user");
         } else {
+            /*
             registrationTicket = new RegistrationTicket();
             registrationTicket.setErrorMessage("Input does not conform to requirements");
             registrationTicket.setStatus("Error");
             registrationTicketResponseEntity = ResponseEntity.badRequest().body(registrationTicket);
+             */
+            throw new BadParameterException("Invalid parameters");
         }
 
         return registrationTicketResponseEntity;
     }
+
+
+    @Operation(summary = "Register new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "New user is registered",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = RegistrationTicket.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad parameters",
+                    content = @Content) })
+    @RequestMapping(value = "/registercliptopic", method=RequestMethod.POST)
+    public ResponseEntity<ClipTopic> registerClipTopic(@RequestBody ClipTopic clipTopic) {
+        log.info("ClipController received request for /registerClipTopic with clipTopic - name: {}, description: {}", clipTopic.getName(), clipTopic.getDescription());
+        ResponseEntity<ClipTopic> registrationTicketResponseEntity = null;
+        ClipTopic registeredClipTopic = null;
+
+        registeredClipTopic = clipboard.registerClipTopic(clipTopic);
+        registrationTicketResponseEntity = ResponseEntity.ok(registeredClipTopic);
+
+        return registrationTicketResponseEntity;
+    }
 }
+

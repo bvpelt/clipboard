@@ -19,6 +19,8 @@ Purpose:
 # Openapi
 See https://www.baeldung.com/spring-rest-openapi-documentation
 
+Generated doc visible at localhost:8080/v3/api-docs
+
 ## Docker
 Using a docker image to start rabbitmq
 ```shell
