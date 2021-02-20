@@ -1,5 +1,6 @@
 package bsoft.com.clipboard.model;
 
+import bsoft.com.clipboard.controller.BadParameterException;
 import bsoft.com.clipboard.repositories.ClipTopicRepository;
 import bsoft.com.clipboard.repositories.RegistrationTicketRepository;
 import bsoft.com.clipboard.repositories.UserRepository;
@@ -48,6 +49,20 @@ public class Clipboard {
     }
 
     @Transactional
+    public void deleteUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if ((user != null) && user.isPresent()) {
+            RegistrationTicket registrationTicket = user.get().getRegistrationTicket();
+            registrationTicket.setStatus("inactive");
+            registrationTicketRepository.save(registrationTicket);
+            userRepository.deleteById(id);
+        } else {
+            throw new BadParameterException("User not found by id");
+        }
+    }
+
+    @Transactional
     public Optional<User> confirmUser(Long userId) {
         Optional<User> user = updateUserStatus(userId, "confirmed");
         return user;
@@ -76,26 +91,23 @@ public class Clipboard {
     }
 
     @Transactional
-    public RegistrationTicket registerUser(final User user) {
+    public User registerUser(final User user) {
         RegistrationTicket registrationTicket = new RegistrationTicket();
 
         // Check if
         // - the user exists by checking email adres
         // if (user exists)
-        // - return error message - registration already done
+        // - return error message - user already exists
         // else
-        // - return registration ticket
-
+        // - return user
 
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
 
         if ((optionalUser != null) && optionalUser.isPresent()) {
-            // return error
-            registrationTicket.setStatus("error");
-            registrationTicket.setErrorMessage("User already exists");
+            throw new BadParameterException(("user already exists"));
         } else {
             String newUserTicket = UUID.randomUUID().toString();
-            registrationTicket.setStatus("ok");
+            registrationTicket.setStatus("created");
             registrationTicket.setUserTicket(newUserTicket);
 
             registrationTicketRepository.save(registrationTicket);
@@ -104,13 +116,38 @@ public class Clipboard {
             user.setRegistrationTicket(registrationTicket);
             userRepository.save(user);
         }
-        return registrationTicket;
+        return user;
     }
 
     public ClipTopic registerClipTopic(final ClipTopic clipTopic) {
-
         ClipTopic registeredClipTopic;
-        registeredClipTopic = clipTopicRepository.save(clipTopic);
+        // Check if
+        // - the cliptopic exists by checking name
+        // if (cliptopic exists)
+        // - return error messages - cliptopic exists
+        // else
+        // - return cliptopic
+
+        Optional<ClipTopic> optionalClipTopic = clipTopicRepository.findByName(clipTopic.getName());
+        if ((optionalClipTopic != null) && optionalClipTopic.isPresent()) {
+            throw new BadParameterException("cliptopic already exists");
+        } else {
+
+            registeredClipTopic = clipTopicRepository.save(clipTopic);
+        }
         return registeredClipTopic;
+    }
+
+    @Transactional
+    public List<ClipTopic> getClipTopics() {
+        List<ClipTopic> clipTopics = clipTopicRepository.findAll(Sort.by("name"));
+
+        return clipTopics;
+    }
+
+    @Transactional
+    public Optional<ClipTopic> getClipTopicById(Long id) {
+        Optional<ClipTopic> clipTopic = clipTopicRepository.findById(id);
+        return clipTopic;
     }
 }

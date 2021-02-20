@@ -1,6 +1,5 @@
 package bsoft.com.clipboard.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,21 +19,21 @@ public class User {
     private Long id;
 
     @NotBlank
-    @Size(min=0, max=24)
+    @Size(min = 0, max = 24)
     @Column(name = "NAME")
     private String name;
 
     @NotBlank
-    @Size(min=0, max=128)
+    @Size(min = 0, max = 128)
     @Column(name = "EMAIL")
     private String email;    // email adres, must have a value and be unique
 
     @NotBlank
-    @Size(min=0, max=128)
+    @Size(min = 0, max = 128)
     @Column(name = "ENDPOINT")
     private String endpoint;
 
-    @Size(min=0, max=24)
+    @Size(min = 0, max = 24)
 //    @JsonIgnore
     @Column(name = "STATUS")
     private String status;   // possible values [ created, confirmed, disabled, removed ]

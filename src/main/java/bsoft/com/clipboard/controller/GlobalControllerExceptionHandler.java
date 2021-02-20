@@ -1,6 +1,5 @@
 package bsoft.com.clipboard.controller;
 
-import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,4 +20,12 @@ public class GlobalControllerExceptionHandler {
     public ResponseEntity<Error> userNotFound(RuntimeException ex) {
         return new ResponseEntity<Error>(new Error(ex.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ClipTopicNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Error> clipTopicNotFound(RuntimeException ex) {
+        return new ResponseEntity<Error>(new Error(ex.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
 }
+
+

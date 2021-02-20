@@ -1,0 +1,558 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/users/{id}/removed": {
+      "put": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Change status of user to removed",
+        "operationId": "removeUserStatusById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed status to removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/disabled": {
+      "put": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Change status of user to disabled",
+        "operationId": "disableUserStatusById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed status to disabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/confirm": {
+      "put": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Change status of user to confirmed",
+        "operationId": "updateUserStatusById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Changed status to confirmed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Get all known users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Found users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No users found",
+            "content": {
+
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Register new user",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "New user is registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationTicket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad parameters",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cliptopics": {
+      "get": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Get all known cliptopics",
+        "operationId": "getClipTopics",
+        "responses": {
+          "200": {
+            "description": "Found cliptopics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClipTopicList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No cliptopics found",
+            "content": {
+
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Register new cliptopic",
+        "operationId": "registerClipTopic",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClipTopic"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "New user is registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClipTopic"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad parameters",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Get a user by its id",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Delete a user by its id",
+        "operationId": "deleteUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cliptopics/{id}": {
+      "get": {
+        "tags": [
+          "clip-controller"
+        ],
+        "summary": "Get a cliptopic by its id",
+        "operationId": "getClipTopicById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found the cliptopic",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClipTopic"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "ClipTopic not found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RegistrationTicket": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "userTicket": {
+            "maxLength": 48,
+            "minLength": 0,
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "required": [
+          "email",
+          "endpoint",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string"
+          },
+          "endpoint": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string"
+          },
+          "status": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string"
+          },
+          "registrationTicket": {
+            "$ref": "#/components/schemas/RegistrationTicket"
+          }
+        }
+      },
+      "ClipTopic": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "maxLength": 24,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "UserList": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "ClipTopicList": {
+        "type": "object",
+        "properties": {
+          "clipTopics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClipTopic"
+            }
+          }
+        }
+      }
+    }
+  }
+}

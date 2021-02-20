@@ -25,3 +25,20 @@ databaseChangeLog:
               - rollback:
                     dropTable:
                         - tableName: cliptopic
+    - changeSet:
+        id:  310
+        author:  bart
+        dbms: PostgreSQL
+        comment: Create ClipTopic name index
+        changes:
+          - createIndex:
+              clustered:  true
+              columns:
+                - column:
+                    descending:  true
+                    name:  NAME
+              indexName:  idx_name
+              schemaName:  public
+              tableName:  cliptopic
+              unique:  true
+

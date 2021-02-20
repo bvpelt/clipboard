@@ -1,6 +1,6 @@
 package bsoft.com.clipboard.model;
 
-import lombok.*;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,11 +18,11 @@ public class ClipTopic {
     private Long id;
 
     @NotBlank
-    @Size(min=0, max=24)
+    @Size(min = 0, max = 24)
     @Column(name = "NAME")
     private String name;
 
-    @Size(min=0, max=128)
+    @Size(min = 0, max = 128)
     @Column(name = "DESCRIPTION")
     private String description;
 }

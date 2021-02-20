@@ -54,6 +54,9 @@ databaseChangeLog:
               - column:
                   name: USERTICKET
                   type: varchar(48)
+              - column:
+                  name: STATUS
+                  type: varchar(24)
         - rollback:
             dropTable:
               - tableName: REGISTRATIONTICKET
