@@ -1,19 +1,47 @@
 package bsoft.com.clipboard.controller;
 
 import bsoft.com.clipboard.model.*;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Clipboard API",
+                version = "r0.1",
+                description = "The clipboard API provides an API to let clients send messages"
+                        + " It is designed to support both administration of users/topics and subscriptions",
+                contact = @Contact(
+                        name = "Bart van Pelt",
+                        email = "brtvnplt@gmail.com"
+                ),
+                license = @License(
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.html",
+                        name = "Apache 2.0"
+                )
+        ),
+        security = {
+                @SecurityRequirement(
+                        name = "accessToken"
+                )
+        }
+)
 
 @RestController
 @Slf4j

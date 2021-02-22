@@ -17,7 +17,9 @@ Purpose:
 - https://blog.avraampiperidis.com/dependency-management-and-versioning-with-a-maven-multi-module-project/
 
 # Openapi
-See https://www.baeldung.com/spring-rest-openapi-documentation
+See 
+- https://www.baeldung.com/spring-rest-openapi-documentation
+- https://swagger.io/resources/webinars/automate-code-first-approach-swagger/
 
 Generated doc visible at localhost:8080/v3/api-docs
 
