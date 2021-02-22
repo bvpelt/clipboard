@@ -20,6 +20,11 @@ Purpose:
 See 
 - https://www.baeldung.com/spring-rest-openapi-documentation
 - https://swagger.io/resources/webinars/automate-code-first-approach-swagger/
+- https://springdoc.org/
+
+API Available on:
+- http://localhost:8080/swagger-ui.html
+- http://localhost:8080/v3/api-docs
 
 Generated doc visible at localhost:8080/v3/api-docs
 
