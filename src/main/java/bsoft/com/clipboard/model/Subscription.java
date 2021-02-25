@@ -11,25 +11,21 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Data
-@Entity(name = "ClipTopic")
-@Table(name = "cliptopic")
-public class ClipTopic implements Serializable {
+@Entity(name = "Subscription")
+@Table(name = "subscription")
+public class Subscription implements Serializable {
+
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
     private Long id;
 
-    @NotBlank
-    @Size(min = 0, max = 24)
-    @Column(name = "NAME")
-    private String name;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
-    @Size(min = 0, max = 128)
-    @Column(name = "DESCRIPTION")
-    private String description;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "clipTopic", fetch = FetchType.LAZY)
-    Set<Subscription> subscriptions;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "CLIPTOPIC_ID", nullable = false)
+    private ClipTopic clipTopic;
 }

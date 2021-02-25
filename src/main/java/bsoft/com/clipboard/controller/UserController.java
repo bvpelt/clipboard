@@ -6,6 +6,7 @@ import bsoft.com.clipboard.model.User;
 import bsoft.com.clipboard.model.UserList;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -279,6 +280,35 @@ public class UserController {
         }
         return userResponse;
     }
+
+    @Operation(summary = "Add subscriptions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Add subscriptions",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content)})
+    @RequestMapping(value = "/users/{id}/subscriptions", method = RequestMethod.PUT)
+    public ResponseEntity<User> addSubscriptions(@PathVariable Long id, @Parameter String[] names) {
+        ResponseEntity<User> userResponse = null;
+        Optional<User> user;
+
+        if (id <= 0L) {
+            throw new BadParameterException("Invalid id specified");
+        }
+
+        user = clipboard.addUserSubscriptions(id, names);
+
+        if (user.isPresent()) {
+            userResponse = ResponseEntity.ok(user.get());
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+        return userResponse;
+    }
+
 
 }
 

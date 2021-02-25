@@ -31,11 +31,31 @@ databaseChangeLog:
               - column:
                   name: REGISTRATIONTICKET_ID
                   type: BIGINT
+              - column:
+                  name: SUBSCRIPTION_ID
+                  type: BIGINT
         - rollback:
             dropTable:
               - tableName: USER
   - changeSet:
-      id: 110
+      id:  110
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create user email index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  EMAIL
+            indexName:  idx_email
+            schemaName:  public
+            tableName:  clipuser
+            unique:  true
+
+  - changeSet:
+      id: 120
       author: bart
       dbms: PostgreSQL
       comment: Create RegistrationTicket

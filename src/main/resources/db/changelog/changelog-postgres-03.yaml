@@ -1,44 +1,60 @@
 databaseChangeLog:
-    - changeSet:
-          id: 300
-          author: bart
-          dbms: PostgreSQL
-          comment: Create ClipTopic
-          changes:
-              - createTable:
-                    schemaName: public
-                    tableName: cliptopic
-                    columns:
-                        - column:
-                              name: ID
-                              type: BIGINT
-                              autoIncrement: true
-                              constraints:
-                                  primaryKey: true
-                                  nullable: false
-                        - column:
-                              name: NAME
-                              type: varchar(24)
-                        - column:
-                              name: DESCRIPTION
-                              type: varchar(128)
-              - rollback:
-                    dropTable:
-                        - tableName: cliptopic
-    - changeSet:
-        id:  310
-        author:  bart
-        dbms: PostgreSQL
-        comment: Create ClipTopic name index
-        changes:
-          - createIndex:
-              clustered:  true
-              columns:
-                - column:
-                    descending:  true
-                    name:  NAME
-              indexName:  idx_name
-              schemaName:  public
-              tableName:  cliptopic
-              unique:  true
+  - changeSet:
+      id: 400
+      author: bart
+      dbms: PostgreSQL
+      comment: Create Subscription
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: subscription
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: USER_ID
+                  type: BIGINT
+              - column:
+                  name: CLIPTOPIC_ID
+                  type: BIGINT
+        - rollback:
+            dropTable:
+              - tableName: subscription
+  - changeSet:
+      id:  410
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create ClipTopic name index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  USER_ID
+            indexName:  idx_userid
+            schemaName:  public
+            tableName:  subscription
+            unique:  false
+  - changeSet:
+      id:  420
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create ClipTopic name index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  CLIPTOPIC_ID
+            indexName:  idx_cliptopic_id
+            schemaName:  public
+            tableName:  subscription
+            unique:  false
 

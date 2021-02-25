@@ -39,7 +39,7 @@ public class ClipTopicController {
                     content = @Content)})
     @RequestMapping(value = "/cliptopics", method = RequestMethod.POST)
     public ResponseEntity<ClipTopic> registerClipTopic(@RequestBody ClipTopic clipTopic) {
-        log.info("ClipTopicController received request for /registerClipTopic with clipTopic - name: {}, description: {}", clipTopic.getName(), clipTopic.getDescription());
+        log.info("ClipTopicController received request for /cliptopics with clipTopic - name: {}, description: {}", clipTopic.getName(), clipTopic.getDescription());
         ResponseEntity<ClipTopic> clipTopicResponse = null;
         ClipTopic registeredClipTopic = null;
 

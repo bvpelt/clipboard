@@ -16,6 +16,9 @@ Purpose:
 - https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
 - https://blog.avraampiperidis.com/dependency-management-and-versioning-with-a-maven-multi-module-project/
 
+# JPA
+- See many-to-many https://www.baeldung.com/jpa-many-to-many
+
 # Openapi
 See 
 - https://www.baeldung.com/spring-rest-openapi-documentation

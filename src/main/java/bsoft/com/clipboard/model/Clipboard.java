@@ -1,21 +1,26 @@
 package bsoft.com.clipboard.model;
 
 import bsoft.com.clipboard.controller.BadParameterException;
+import bsoft.com.clipboard.controller.UserNotFoundException;
 import bsoft.com.clipboard.repositories.ClipTopicRepository;
 import bsoft.com.clipboard.repositories.RegistrationTicketRepository;
+import bsoft.com.clipboard.repositories.SubscriptionRepository;
 import bsoft.com.clipboard.repositories.UserRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import javax.sound.sampled.Clip;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @Getter
 @Setter
@@ -25,14 +30,17 @@ public class Clipboard {
     private UserRepository userRepository;
     private RegistrationTicketRepository registrationTicketRepository;
     private ClipTopicRepository clipTopicRepository;
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     public Clipboard(final UserRepository userRepository,
                      final RegistrationTicketRepository registrationTicketRepository,
-                     final ClipTopicRepository clipTopicRepository) {
+                     final ClipTopicRepository clipTopicRepository,
+                     final SubscriptionRepository subscriptionRepository) {
         this.userRepository = userRepository;
         this.registrationTicketRepository = registrationTicketRepository;
         this.clipTopicRepository = clipTopicRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     @Transactional
@@ -149,5 +157,50 @@ public class Clipboard {
     public Optional<ClipTopic> getClipTopicById(Long id) {
         Optional<ClipTopic> clipTopic = clipTopicRepository.findById(id);
         return clipTopic;
+    }
+
+    @Transactional
+    public Optional<User> addUserSubscriptions(Long id, String [] names) {
+        Optional<User> user = userRepository.findById(id);
+
+        if ((user != null) && user.isPresent()) {
+            User curUser = user.get();
+            for (int i = 0; i < names.length; i++) {
+                Optional<ClipTopic> clipTopic = clipTopicRepository.findByName(names[i]);
+                if ((clipTopic != null) && clipTopic.isPresent()) {
+                    ClipTopic curClipTopic = clipTopic.get();
+                    Optional<Subscription> subscription = subscriptionRepository.findByUserAndClipTopic(curUser, curClipTopic);
+                    if (!((subscription != null) && subscription.isPresent())) {
+                        Subscription newSubscription = new Subscription();
+                        newSubscription.setUser(curUser);
+                        newSubscription.setClipTopic(curClipTopic);
+
+                        /*
+                        curUser.getSubscriptions().add(newSubscription);
+                        curClipTopic.getSubscriptions().add(newSubscription);
+
+                        userRepository.save(curUser);
+                        clipTopicRepository.save(curClipTopic);
+
+                         */
+                        subscriptionRepository.save(newSubscription);
+
+                    }
+                } else {
+                    log.info("ClipTopic: {} not found, not added to subscription", names[i]);
+                }
+            }
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+        return user;
+    }
+
+
+    @Transactional
+    public List<Subscription> getSubscriptions() {
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+
+        return subscriptions;
     }
 }

@@ -6,12 +6,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 
 @Data
 @Entity(name = "RegistrationTicket")
 @Table(name = "registrationticket")
-public class RegistrationTicket {
+public class RegistrationTicket implements Serializable {
 
     @JsonIgnore
     @Id

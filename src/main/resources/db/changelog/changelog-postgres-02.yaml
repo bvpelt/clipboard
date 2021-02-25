@@ -1,17 +1,46 @@
 databaseChangeLog:
-- changeSet:
-    id:  200
-    author:  bart
-    dbms: PostgreSQL
-    comment: Create user email index
-    changes:
-      - createIndex:
-          clustered:  true
-          columns:
-            - column:
-                descending:  true
-                name:  EMAIL
-          indexName:  idx_email
-          schemaName:  public
-          tableName:  clipuser
-          unique:  true
+    - changeSet:
+          id: 200
+          author: bart
+          dbms: PostgreSQL
+          comment: Create ClipTopic
+          changes:
+              - createTable:
+                    schemaName: public
+                    tableName: cliptopic
+                    columns:
+                        - column:
+                              name: ID
+                              type: BIGINT
+                              autoIncrement: true
+                              constraints:
+                                  primaryKey: true
+                                  nullable: false
+                        - column:
+                              name: NAME
+                              type: varchar(24)
+                        - column:
+                              name: DESCRIPTION
+                              type: varchar(128)
+                        - column:
+                              name: SUBSCRIPTION_ID
+                              type: BIGINT
+              - rollback:
+                    dropTable:
+                        - tableName: cliptopic
+    - changeSet:
+          id:  210
+          author:  bart
+          dbms: PostgreSQL
+          comment: Create ClipTopic name index
+          changes:
+              - createIndex:
+                    clustered:  true
+                    columns:
+                        - column:
+                              descending:  true
+                              name:  NAME
+                    indexName:  idx_name
+                    schemaName:  public
+                    tableName:  cliptopic
+                    unique:  true
