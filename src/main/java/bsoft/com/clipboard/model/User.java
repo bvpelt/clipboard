@@ -2,6 +2,7 @@ package bsoft.com.clipboard.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -37,7 +38,6 @@ public class User implements Serializable {
     private String endpoint;
 
     @Size(min = 0, max = 24)
-//    @JsonIgnore
     @Column(name = "STATUS")
     private String status;   // possible values [ created, confirmed, disabled, removed ]
 

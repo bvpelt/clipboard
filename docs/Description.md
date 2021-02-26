@@ -18,6 +18,7 @@ Purpose:
 
 # JPA
 - See many-to-many https://www.baeldung.com/jpa-many-to-many
+- See userdefined queries https://attacomsian.com/blog/spring-data-jpa-query-annotation
 
 # Openapi
 See 

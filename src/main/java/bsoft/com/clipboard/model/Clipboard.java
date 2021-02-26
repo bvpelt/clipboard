@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import javax.sound.sampled.Clip;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +52,13 @@ public class Clipboard {
     @Transactional
     public Optional<User> getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
+        return user;
+    }
+
+    @Transactional
+    public User getUserFromApiKey(final String apiKey) {
+        User user = userRepository.findByApiKey(apiKey);
+
         return user;
     }
 
@@ -160,7 +166,13 @@ public class Clipboard {
     }
 
     @Transactional
-    public Optional<User> addUserSubscriptions(Long id, String [] names) {
+    public Optional<ClipTopic> getClipTopicByName(String name) {
+        Optional<ClipTopic> clipTopic = clipTopicRepository.findByName(name);
+        return clipTopic;
+    }
+
+    @Transactional
+    public Optional<User> addUserSubscriptions(Long id, String[] names) {
         Optional<User> user = userRepository.findById(id);
 
         if ((user != null) && user.isPresent()) {
@@ -196,11 +208,22 @@ public class Clipboard {
         return user;
     }
 
-
     @Transactional
     public List<Subscription> getSubscriptions() {
         List<Subscription> subscriptions = subscriptionRepository.findAll();
 
         return subscriptions;
+    }
+
+    @Transactional
+    public boolean checkSubscription(User user, ClipTopic clipTopic) {
+        boolean valid = false;
+        Optional<Subscription> subscription = subscriptionRepository.findByUserAndClipTopic(user, clipTopic);
+
+        if ((subscription != null) && !subscription.isPresent()){
+            valid = true;
+        }
+
+        return valid;
     }
 }

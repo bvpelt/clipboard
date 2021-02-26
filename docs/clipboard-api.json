@@ -1,8 +1,17 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
+    "title": "Clipboard API",
+    "description": "The clipboard API provides an API to let clients send messages It is designed to support both administration of users/topics and subscriptions",
+    "contact": {
+      "name": "Bart van Pelt",
+      "email": "brtvnplt@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "0.1"
   },
   "servers": [
     {
@@ -11,10 +20,66 @@
     }
   ],
   "paths": {
+    "/users/{id}/subscriptions": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Add subscriptions",
+        "operationId": "addSubscriptions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Add subscriptions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id supplied",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    },
     "/users/{id}/removed": {
       "put": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Change status of user to removed",
         "operationId": "removeUserStatusById",
@@ -58,7 +123,7 @@
     "/users/{id}/disabled": {
       "put": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Change status of user to disabled",
         "operationId": "disableUserStatusById",
@@ -102,7 +167,7 @@
     "/users/{id}/confirm": {
       "put": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Change status of user to confirmed",
         "operationId": "updateUserStatusById",
@@ -146,7 +211,7 @@
     "/users": {
       "get": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Get all known users",
         "operationId": "getUsers",
@@ -181,7 +246,7 @@
       },
       "post": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Register new user",
         "operationId": "registerUser",
@@ -225,10 +290,67 @@
         }
       }
     },
+    "/postmessage": {
+      "post": {
+        "tags": [
+          "post-message-controller"
+        ],
+        "summary": "Post a message",
+        "operationId": "postMessage",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostMessage"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message is posted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad parameters",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/cliptopics": {
       "get": {
         "tags": [
-          "clip-controller"
+          "clip-topic-controller"
         ],
         "summary": "Get all known cliptopics",
         "operationId": "getClipTopics",
@@ -263,7 +385,7 @@
       },
       "post": {
         "tags": [
-          "clip-controller"
+          "clip-topic-controller"
         ],
         "summary": "Register new cliptopic",
         "operationId": "registerClipTopic",
@@ -310,7 +432,7 @@
     "/users/{id}": {
       "get": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Get a user by its id",
         "operationId": "getUserById",
@@ -352,7 +474,7 @@
       },
       "delete": {
         "tags": [
-          "clip-controller"
+          "user-controller"
         ],
         "summary": "Delete a user by its id",
         "operationId": "deleteUserById",
@@ -397,10 +519,47 @@
         }
       }
     },
+    "/subscriptions": {
+      "get": {
+        "tags": [
+          "subscription-controller"
+        ],
+        "summary": "Get all known subscriptions",
+        "operationId": "getSubscriptions",
+        "responses": {
+          "200": {
+            "description": "Found subscriptions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscription"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No subscriptions found",
+            "content": {
+
+            }
+          }
+        }
+      }
+    },
     "/cliptopics/{id}": {
       "get": {
         "tags": [
-          "clip-controller"
+          "clip-topic-controller"
         ],
         "summary": "Get a cliptopic by its id",
         "operationId": "getClipTopicById",
@@ -459,15 +618,14 @@
       "RegistrationTicket": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string"
-          },
           "userTicket": {
             "maxLength": 48,
             "minLength": 0,
             "type": "string"
           },
-          "errorMessage": {
+          "status": {
+            "maxLength": 24,
+            "minLength": 0,
             "type": "string"
           }
         }
@@ -509,6 +667,17 @@
           }
         }
       },
+      "PostMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "clipTopicName": {
+            "type": "string"
+          }
+        }
+      },
       "ClipTopic": {
         "required": [
           "name"
@@ -539,6 +708,21 @@
             "items": {
               "$ref": "#/components/schemas/User"
             }
+          }
+        }
+      },
+      "Subscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "clipTopic": {
+            "$ref": "#/components/schemas/ClipTopic"
           }
         }
       },

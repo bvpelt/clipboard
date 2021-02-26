@@ -14,22 +14,19 @@ import java.util.Set;
 @Entity(name = "ClipTopic")
 @Table(name = "cliptopic")
 public class ClipTopic implements Serializable {
+    @JsonIgnore
+    @OneToMany(mappedBy = "clipTopic", fetch = FetchType.LAZY)
+    Set<Subscription> subscriptions;
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
     private Long id;
-
     @NotBlank
     @Size(min = 0, max = 24)
     @Column(name = "NAME")
     private String name;
-
     @Size(min = 0, max = 128)
     @Column(name = "DESCRIPTION")
     private String description;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "clipTopic", fetch = FetchType.LAZY)
-    Set<Subscription> subscriptions;
 }
