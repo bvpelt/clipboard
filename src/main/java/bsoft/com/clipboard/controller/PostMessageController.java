@@ -1,5 +1,6 @@
 package bsoft.com.clipboard.controller;
 
+import bsoft.com.clipboard.config.RabbitConfiguration;
 import bsoft.com.clipboard.model.ClipTopic;
 import bsoft.com.clipboard.model.Clipboard;
 import bsoft.com.clipboard.model.PostMessage;
@@ -12,10 +13,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import liquibase.pro.packaged.C;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,10 +31,19 @@ import java.util.Optional;
 public class PostMessageController {
 
     private Clipboard clipboard;
+    private RabbitTemplate rabbitTemplate;
+    private FanoutExchange fanoutExchange;
+    private String exchangeName;
 
     @Autowired
-    public PostMessageController(final Clipboard clipboard) {
+    public PostMessageController(final Clipboard clipboard,
+                                 final RabbitTemplate rabbitTemplate,
+                                 final FanoutExchange fanoutExchange,
+                                 final  String exchangeName) {
         this.clipboard = clipboard;
+        this.rabbitTemplate = rabbitTemplate;
+        this.fanoutExchange = fanoutExchange;
+        this.exchangeName = exchangeName;
     }
 
     @Operation(summary = "Post a message")
@@ -51,11 +67,11 @@ public class PostMessageController {
         //
         // use api-key to get user
         //
-        User user = clipboard.getUserFromApiKey(apiKey);
-        if (user == null) {
+        List<User> user = clipboard.getUserFromApiKey(apiKey);
+        if ((user == null) || (user.size() !=1)) {
             throw new BadParameterException("Invalid API key");
         }
-        log.info("User: {}, API-key: {}", user.getName(), apiKey);
+        log.info("User: {}, API-key: {}", user.get(0).getName(), apiKey);
 
         if ((postMessage.getMessage() == null) || (postMessage.getMessage().length() == 0)) {
             throw new BadParameterException("No message specified");
@@ -70,11 +86,40 @@ public class PostMessageController {
             throw new BadParameterException("Topic unknown");
         }
 
-        log.info("Find subscription for user: {} with topic: {}", user.getName(), postMessage.getClipTopicName());
-        boolean validSubscription = clipboard.checkSubscription(user, clipTopic.get());
+        log.info("Find subscription for user: {} with topic: {}", user.get(0).getName(), postMessage.getClipTopicName());
+        boolean validSubscription = clipboard.checkSubscription(user.get(0), clipTopic.get());
+        log.info("Subscription found: {}", validSubscription);
+
+        if (!validSubscription) {
+            throw new BadParameterException("User has no subscriptions to specified topic");
+        }
+
+        //
+        // post message to rabbitmq with name cliptopic.name
+        //
+        sendMessage(postMessage);
+
 
         return clipTopicResponse;
     }
 
+    private void sendMessage(final PostMessage postMessage) {
+        try {
+            log.info("Before send");
+            rabbitTemplate.convertAndSend(exchangeName, "", postMessage);
+            log.info("After send");
+        } catch (Exception e) {
+            log.error("Prolem sending message - {}", e);
+        }
+    }
+
+    private Queue getQueue(final String name) {
+        boolean durable = true;
+        return new Queue(name, durable); // use durable queues
+    }
+
+    private Binding getBinding(final Queue queue, FanoutExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange);
+    }
 }
 

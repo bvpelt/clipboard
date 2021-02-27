@@ -56,8 +56,8 @@ public class Clipboard {
     }
 
     @Transactional
-    public User getUserFromApiKey(final String apiKey) {
-        User user = userRepository.findByApiKey(apiKey);
+    public List<User> getUserFromApiKey(final String apiKey) {
+        List<User> user = userRepository.findByApiKey(apiKey);
 
         return user;
     }
@@ -217,11 +217,11 @@ public class Clipboard {
 
     @Transactional
     public boolean checkSubscription(User user, ClipTopic clipTopic) {
-        boolean valid = false;
-        Optional<Subscription> subscription = subscriptionRepository.findByUserAndClipTopic(user, clipTopic);
+        boolean valid = true;
+        List<Subscription> subscription = subscriptionRepository.findByUserAndClipTopicName(user.getId(), clipTopic.getName());
 
-        if ((subscription != null) && !subscription.isPresent()){
-            valid = true;
+        if ((subscription == null) || (subscription.size() != 1)){
+            valid = false;
         }
 
         return valid;

@@ -11,6 +11,10 @@ Purpose:
 - Once the message is posted to the topic it is distributed to all interested readers
 
 # RabbitMQ
+- Access at http://localhost:15672/
+- user guest
+- pwd guest
+- See https://www.javainuse.com/messaging/rabbitmq/exchange
 
 # Multimodule project
 - https://books.sonatype.com/mvnex-book/reference/multimodule-web-spring-sect-intro.html
