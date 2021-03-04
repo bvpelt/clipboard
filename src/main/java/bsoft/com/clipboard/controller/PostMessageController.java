@@ -1,16 +1,16 @@
 package bsoft.com.clipboard.controller;
 
-import bsoft.com.clipboard.config.RabbitConfiguration;
+import bsoft.com.clipboard.config.ConfigElements;
 import bsoft.com.clipboard.model.ClipTopic;
 import bsoft.com.clipboard.model.Clipboard;
 import bsoft.com.clipboard.model.PostMessage;
 import bsoft.com.clipboard.model.User;
+import com.rabbitmq.client.Channel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import liquibase.pro.packaged.C;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,16 +35,22 @@ public class PostMessageController {
     private RabbitTemplate rabbitTemplate;
     private FanoutExchange fanoutExchange;
     private String exchangeName;
+    private Channel channel;
+    private ConfigElements configElements;
 
     @Autowired
     public PostMessageController(final Clipboard clipboard,
                                  final RabbitTemplate rabbitTemplate,
                                  final FanoutExchange fanoutExchange,
-                                 final  String exchangeName) {
+                                 final String exchangeName,
+                                 final Channel channel,
+                                 final ConfigElements configElements) {
         this.clipboard = clipboard;
         this.rabbitTemplate = rabbitTemplate;
         this.fanoutExchange = fanoutExchange;
         this.exchangeName = exchangeName;
+        this.channel = channel;
+        this.configElements = configElements;
     }
 
     @Operation(summary = "Post a message")
@@ -59,7 +66,7 @@ public class PostMessageController {
         log.info("PostMessageController received message x-api-key: {}, name: {}, message: {}", apiKey, postMessage.getClipTopicName(), postMessage.getMessage());
         ResponseEntity<PostMessage> clipTopicResponse = ResponseEntity.ok(postMessage);
 
-        if ((apiKey == null) || (apiKey.length() == 0)){
+        if ((apiKey == null) || (apiKey.length() == 0)) {
             throw new BadParameterException("API Key required");
         }
         log.info("Valid api key: {}", apiKey);
@@ -68,7 +75,7 @@ public class PostMessageController {
         // use api-key to get user
         //
         List<User> user = clipboard.getUserFromApiKey(apiKey);
-        if ((user == null) || (user.size() !=1)) {
+        if ((user == null) || (user.size() != 1)) {
             throw new BadParameterException("Invalid API key");
         }
         log.info("User: {}, API-key: {}", user.get(0).getName(), apiKey);
@@ -105,8 +112,12 @@ public class PostMessageController {
 
     private void sendMessage(final PostMessage postMessage) {
         try {
+            String queueName = configElements.getQueueName();
             log.info("Before send");
-            rabbitTemplate.convertAndSend(exchangeName, "", postMessage);
+            //rabbitTemplate.convertAndSend(exchangeName, "", postMessage);
+            boolean durable = false;
+            channel.queueDeclare(queueName, durable, false, false, null);
+            channel.basicPublish("", queueName, null, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
             log.info("After send");
         } catch (Exception e) {
             log.error("Prolem sending message - {}", e);

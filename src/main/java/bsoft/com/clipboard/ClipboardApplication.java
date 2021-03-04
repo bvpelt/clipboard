@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ClipboardApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(ClipboardApplication.class, args);
     }
 

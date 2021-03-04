@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    public final static String FIND_BY_API_KEY = "SELECT u.* " +
+    String FIND_BY_API_KEY = "SELECT u.* " +
             "FROM ClipUser u, RegistrationTicket t " +
             "WHERE u.registrationticket_id = t.id AND " +
             "t.userticket = :apikey ";

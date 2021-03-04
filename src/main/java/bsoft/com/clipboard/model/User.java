@@ -15,36 +15,30 @@ import java.util.Set;
 @Table(name = "clipuser")
 public class User implements Serializable {
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    Set<Subscription> subscriptions;
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "ID")
     private Long id;
-
     @NotBlank
     @Size(min = 0, max = 24)
     @Column(name = "NAME")
     private String name;
-
     @NotBlank
     @Size(min = 0, max = 128)
     @Column(name = "EMAIL")
     private String email;    // email adres, must have a value and be unique
-
     @NotBlank
     @Size(min = 0, max = 128)
     @Column(name = "ENDPOINT")
     private String endpoint;
-
     @Size(min = 0, max = 24)
     @Column(name = "STATUS")
     private String status;   // possible values [ created, confirmed, disabled, removed ]
-
     @OneToOne(optional = true)
     @JoinColumn(name = "REGISTRATIONTICKET_ID", referencedColumnName = "ID")
     private RegistrationTicket registrationTicket;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    Set<Subscription> subscriptions;
 }

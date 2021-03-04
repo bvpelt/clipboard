@@ -220,7 +220,7 @@ public class Clipboard {
         boolean valid = true;
         List<Subscription> subscription = subscriptionRepository.findByUserAndClipTopicName(user.getId(), clipTopic.getName());
 
-        if ((subscription == null) || (subscription.size() != 1)){
+        if ((subscription == null) || (subscription.size() != 1)) {
             valid = false;
         }
 

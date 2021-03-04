@@ -1,6 +1,5 @@
 package bsoft.com.clipboard.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,12 +17,12 @@ public class Subscription implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "CLIPTOPIC_ID", nullable = false)
     private ClipTopic clipTopic;

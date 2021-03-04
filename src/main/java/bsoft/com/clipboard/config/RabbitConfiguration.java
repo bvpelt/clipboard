@@ -1,7 +1,9 @@
 package bsoft.com.clipboard.config;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import lombok.Getter;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -12,6 +14,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+@Slf4j
 @Configuration
 @Getter
 public class RabbitConfiguration {
@@ -22,6 +28,28 @@ public class RabbitConfiguration {
     @Bean
     public CachingConnectionFactory connectionFactory() {
         return new CachingConnectionFactory(hostName);
+    }
+
+    @Bean
+    public Channel channel(CachingConnectionFactory connectionFactory) {
+        Channel channel = null;
+        try {
+            Connection connection = connectionFactory.getRabbitConnectionFactory().newConnection();
+            channel = connection.createChannel();
+        } catch (TimeoutException ex1) {
+            log.error("Timeout: {}", ex1);
+        } catch (IOException ex2) {
+            log.error("IO exception: {}", ex2);
+        } catch (Exception ex3) {
+            log.error("Unknown exception: {}", ex3);
+        }
+        log.info("Channel created");
+        return channel;
+    }
+
+    @Bean
+    public ConfigElements configElements() {
+        return new ConfigElements();
     }
 
     @Bean
