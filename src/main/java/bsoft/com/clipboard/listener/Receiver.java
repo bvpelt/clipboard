@@ -25,8 +25,10 @@ public class Receiver {
 
         try {
             String queueName = configElements.getQueueName();
-            boolean durable = false;
+            boolean durable = true;
             channel.queueDeclare(queueName, durable, false, false, null);
+            int prefetchCount = 1;
+            channel.basicQos(prefetchCount);
             log.info("Receiver - Waiting for messages");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {

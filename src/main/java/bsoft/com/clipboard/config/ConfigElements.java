@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ConfigElements {
-    private final String queueName = "hello";
+    private final String queueName = "task_queue";
 
 
 }

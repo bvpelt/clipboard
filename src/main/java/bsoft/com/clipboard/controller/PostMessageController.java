@@ -6,6 +6,7 @@ import bsoft.com.clipboard.model.Clipboard;
 import bsoft.com.clipboard.model.PostMessage;
 import bsoft.com.clipboard.model.User;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -115,9 +116,9 @@ public class PostMessageController {
             String queueName = configElements.getQueueName();
             log.info("Before send");
             //rabbitTemplate.convertAndSend(exchangeName, "", postMessage);
-            boolean durable = false;
+            boolean durable = true;
             channel.queueDeclare(queueName, durable, false, false, null);
-            channel.basicPublish("", queueName, null, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
+            channel.basicPublish("", queueName, MessageProperties.PERSISTENT_TEXT_PLAIN, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
             log.info("After send");
         } catch (Exception e) {
             log.error("Prolem sending message - {}", e);
