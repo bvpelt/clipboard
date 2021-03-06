@@ -192,11 +192,16 @@ public class Clipboard {
                         curClipTopic.getSubscriptions().add(newSubscription);
 
                         userRepository.save(curUser);
+
+
+
                         clipTopicRepository.save(curClipTopic);
 
                          */
                         subscriptionRepository.save(newSubscription);
 
+                    } else {
+                        log.info("Subscription already exists, not added again");
                     }
                 } else {
                     log.info("ClipTopic: {} not found, not added to subscription", names[i]);
