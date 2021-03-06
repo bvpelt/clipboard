@@ -229,3 +229,9 @@ In posting a message the registration key from the user is used as api-key.
 * Connection #0 to host localhost left intact
 {"message":"Test message","clipTopicName":"news"}
 ```
+### Start test
+Use the testscript to send x messages.
+If no arument is specified 100 messages will be send.
+```shell
+# docs/dotest.bash 20
+```

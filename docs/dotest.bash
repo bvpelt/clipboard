@@ -1,8 +1,15 @@
 #!/bin/bash
 
 x=0
+maxmsg=100
 
-while [ $x -lt 100 ]
+if [ "$#" -eq 1 ];
+then
+  maxmsg=$1
+  echo maxmsg=$maxmsg
+fi
+
+while [ $x -lt $maxmsg ]
 do
   echo $x
   content="{ \"message\": \"Vervolg message ${x}\", \"clipTopicName\": \"news\"}"
