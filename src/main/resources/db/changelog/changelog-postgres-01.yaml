@@ -31,9 +31,6 @@ databaseChangeLog:
               - column:
                   name: REGISTRATIONTICKET_ID
                   type: BIGINT
-              - column:
-                  name: SUBSCRIPTION_ID
-                  type: BIGINT
         - rollback:
             dropTable:
               - tableName: USER
@@ -80,3 +77,20 @@ databaseChangeLog:
         - rollback:
             dropTable:
               - tableName: REGISTRATIONTICKET
+
+  - changeSet:
+      id:  130
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create user userticket index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  USERTICKET
+            indexName:  idx_userticket
+            schemaName:  public
+            tableName:  registrationticket
+            unique:  true

@@ -136,8 +136,8 @@ WARNING: All illegal access operations will be denied in a future release
 ## Use the api to add data
 ### Add user
 ```shell
-# content="{\"name\": \"mark\", \"email\": \"mark@universe.org\", \"endpoint\": \"https://mark.universe.org/news\"}"
-# curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/users
+% content="{\"name\": \"mark\", \"email\": \"mark@universe.org\", \"endpoint\": \"https://mark.universe.org/news\"}"
+% curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/users
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
@@ -146,22 +146,22 @@ WARNING: All illegal access operations will be denied in a future release
 > User-Agent: curl/7.68.0
 > Accept: */*
 > Content-Type: application/json
-> Content-Length: 100
+> Content-Length: 92
 > 
-* upload completely sent off: 100 out of 100 bytes
+* upload completely sent off: 92 out of 92 bytes
 * Mark bundle as not supporting multiuse
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Fri, 05 Mar 2021 20:05:49 GMT
+< Date: Sat, 06 Mar 2021 19:40:45 GMT
 < 
 * Connection #0 to host localhost left intact
-{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"1310eb96-0b0d-4566-904f-f2074fb1b3b8","status":"created"}}
+{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c","status":"created"}}
 ```
 ### Add topic
 ```shell
-# content="{\"name\": \"news\", \"description\": \"News items\"}"
-# curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/cliptopics
+% content="{\"name\": \"news\", \"description\": \"News items\"}"
+% curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/cliptopics
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
@@ -170,21 +170,22 @@ WARNING: All illegal access operations will be denied in a future release
 > User-Agent: curl/7.68.0
 > Accept: */*
 > Content-Type: application/json
-> Content-Length: 70
+> Content-Length: 45
 > 
-* upload completely sent off: 70 out of 70 bytes
+* upload completely sent off: 45 out of 45 bytes
 * Mark bundle as not supporting multiuse
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Fri, 05 Mar 2021 20:10:32 GMT
+< Date: Sat, 06 Mar 2021 19:43:42 GMT
 < 
 * Connection #0 to host localhost left intact
-{"id":2,"name":"news","description":"News items"}
+{"id":1,"name":"news","description":"News items"} 
+
 ```
 ### Add subscription
 ```shell
-# curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/users/1/subscriptions?names=news
+% curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/users/1/subscriptions?names=news
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
@@ -198,16 +199,16 @@ WARNING: All illegal access operations will be denied in a future release
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Sat, 06 Mar 2021 17:35:31 GMT
+< Date: Sat, 06 Mar 2021 19:45:56 GMT
 < 
 * Connection #0 to host localhost left intact
-{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"1310eb96-0b0d-4566-904f-f2074fb1b3b8","status":"created"}}
+{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c","status":"created"}}
 ```
 ### Post a message
 In posting a message the registration key from the user is used as api-key.
 ```shell
-# content="{ \"message\": \"Test message\", \"clipTopicName\": \"news\"}"
-# curl -v -H "x-api-key: 1310eb96-0b0d-4566-904f-f2074fb1b3b8" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
+% content="{ \"message\": \"Test message\", \"clipTopicName\": \"news\"}"
+% curl -v -H "x-api-key: 4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
@@ -215,7 +216,7 @@ In posting a message the registration key from the user is used as api-key.
 > Host: localhost:8080
 > User-Agent: curl/7.68.0
 > Accept: */*
-> x-api-key: 1310eb96-0b0d-4566-904f-f2074fb1b3b8
+> x-api-key: 4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c
 > Content-type: application/json
 > Content-Length: 53
 > 
@@ -224,7 +225,7 @@ In posting a message the registration key from the user is used as api-key.
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Sat, 06 Mar 2021 17:39:22 GMT
+< Date: Sat, 06 Mar 2021 19:49:05 GMT
 < 
 * Connection #0 to host localhost left intact
 {"message":"Test message","clipTopicName":"news"}

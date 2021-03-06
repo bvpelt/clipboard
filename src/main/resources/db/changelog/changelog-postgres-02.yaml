@@ -22,9 +22,6 @@ databaseChangeLog:
                         - column:
                               name: DESCRIPTION
                               type: varchar(128)
-                        - column:
-                              name: SUBSCRIPTION_ID
-                              type: BIGINT
               - rollback:
                     dropTable:
                         - tableName: cliptopic
