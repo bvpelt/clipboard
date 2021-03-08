@@ -115,7 +115,7 @@ public class PostMessageController {
         try {
             log.info("Before send");
             channel.exchangeDeclare(postMessage.getClipTopicName(), "fanout");
-            channel.basicPublish(postMessage.getClipTopicName(), "", null, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
+            channel.basicPublish(postMessage.getClipTopicName(), "", null, PostMessage.objToByte(postMessage));
             log.info("After send");
         } catch (Exception e) {
             log.error("Prolem sending message - {}", e);
