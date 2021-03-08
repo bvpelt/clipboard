@@ -113,14 +113,7 @@ public class PostMessageController {
 
     private void sendMessage(final PostMessage postMessage) {
         try {
-            //String queueName = configElements.getQueueName();
             log.info("Before send");
-            /*
-            //rabbitTemplate.convertAndSend(exchangeName, "", postMessage);
-            boolean durable = true;
-            channel.queueDeclare(queueName, durable, false, false, null);
-            channel.basicPublish("", queueName, MessageProperties.PERSISTENT_TEXT_PLAIN, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
-             */
             channel.exchangeDeclare(postMessage.getClipTopicName(), "fanout");
             channel.basicPublish(postMessage.getClipTopicName(), "", null, postMessage.getMessage().getBytes(StandardCharsets.UTF_8));
             log.info("After send");

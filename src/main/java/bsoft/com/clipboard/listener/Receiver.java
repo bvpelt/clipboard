@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class Receiver {
 
+    private int maxReader = 50;
+
     @Autowired
     private ConfigElements configElements;
 
@@ -22,64 +24,36 @@ public class Receiver {
 
     @Bean
     public Receiver newsReceiver() {
+        ReaderTask[] readerTasks = new ReaderTask[maxReader];;
 
-        try {
-            channel.exchangeDeclare(configElements.getNewsExchanges(), "fanout");
-            String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, configElements.getNewsExchanges(), "");
-            log.info("News Receiver - Waiting for messages");
-
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                log.info("News Receiver received: {}", message);
-            };
-            boolean autoAck = true; // auto acknowledge
-            channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
-        } catch (Exception e) {
-            log.error("News Receiver - Problem creating queue: {}", e);
+        for (int i = 0; i < maxReader; i++) {
+            readerTasks[i] = new ReaderTask(channel, configElements.getNewsExchanges(), "News");
+            readerTasks[i].run();
         }
         return this;
     }
 
     @Bean
     public Receiver sportReceiver() {
+        ReaderTask[] readerTasks = new ReaderTask[maxReader];;
 
-        try {
-            channel.exchangeDeclare(configElements.getSportExchanges(), "fanout");
-            String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, configElements.getSportExchanges(), "");
-            log.info("Sport Receiver - Waiting for messages");
-
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                log.info("Sport Receiver received: {}", message);
-            };
-            boolean autoAck = true; // auto acknowledge
-            channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
-        } catch (Exception e) {
-            log.error("Sport Receiver - Problem creating queue: {}", e);
+        for (int i = 0; i < maxReader; i++) {
+            readerTasks[i] = new ReaderTask(channel, configElements.getSportExchanges(), "Sport");
+            readerTasks[i].run();
         }
+
         return this;
     }
 
     @Bean
     public Receiver financeReceiver() {
+        ReaderTask[] readerTasks = new ReaderTask[maxReader];;
 
-        try {
-            channel.exchangeDeclare(configElements.getSportExchanges(), "fanout");
-            String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, configElements.getSportExchanges(), "");
-            log.info("Finance Receiver - Waiting for messages");
-
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                log.info("Finance Receiver received: {}", message);
-            };
-            boolean autoAck = true; // auto acknowledge
-            channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
-        } catch (Exception e) {
-            log.error("Finance Receiver - Problem creating queue: {}", e);
+        for (int i = 0; i < maxReader; i++) {
+            readerTasks[i] = new ReaderTask(channel, configElements.getFinanceExchanges(), "Finance");
+            readerTasks[i].run();
         }
+
         return this;
     }
 
