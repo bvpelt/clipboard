@@ -5,13 +5,11 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
-
 @Slf4j
 public class ReaderTask implements Runnable {
-    private Channel channel;
-    private String exchangeName;
-    private String readerName;
+    private final Channel channel;
+    private final String exchangeName;
+    private final String readerName;
 
     public ReaderTask(final Channel channel,
                       final String exchangeName,
@@ -33,14 +31,15 @@ public class ReaderTask implements Runnable {
                 //String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
                 PostMessage postMessage = null;
                 try {
-                    postMessage = (PostMessage)PostMessage.byteToObj(delivery.getBody());
+                    postMessage = (PostMessage) PostMessage.byteToObj(delivery.getBody());
                 } catch (ClassNotFoundException e) {
                     log.error("Could not convert data");
                 }
                 log.info("{} Receiver received topic:{} - {}", readerName, postMessage.getClipTopicName(), postMessage.getMessage());
             };
             boolean autoAck = true; // auto acknowledge
-            channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> { });
+            channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {
+            });
         } catch (Exception e) {
             log.error("{}} Receiver - Problem creating queue: {}", readerName, e);
         }

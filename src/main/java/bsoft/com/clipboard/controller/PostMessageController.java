@@ -6,7 +6,6 @@ import bsoft.com.clipboard.model.Clipboard;
 import bsoft.com.clipboard.model.PostMessage;
 import bsoft.com.clipboard.model.User;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.MessageProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
