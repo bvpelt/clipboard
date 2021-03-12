@@ -1,22 +1,28 @@
 package bsoft.com.clipboard.listener;
 
 import bsoft.com.clipboard.model.PostMessage;
+import bsoft.com.clipboard.repositories.PostMessageRepository;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class ReaderTask implements Runnable {
     private final Channel channel;
     private final String exchangeName;
     private final String readerName;
+    private final PostMessageRepository postMessageRepository;
 
     public ReaderTask(final Channel channel,
                       final String exchangeName,
-                      final String readerName) {
+                      final String readerName,
+                      final PostMessageRepository postMessageRepository) {
         this.channel = channel;
         this.exchangeName = exchangeName;
         this.readerName = readerName;
+        this.postMessageRepository = postMessageRepository;
     }
 
     public void run() {
@@ -35,7 +41,8 @@ public class ReaderTask implements Runnable {
                 } catch (ClassNotFoundException e) {
                     log.error("Could not convert data");
                 }
-                log.info("{} Receiver received topic:{} - {}", readerName, postMessage.getClipTopicName(), postMessage.getMessage());
+                log.info("{} Receiver received topic:{} from {}:  {}", readerName, postMessage.getClipTopicName(), postMessage.getApiKey(), postMessage.getMessage());
+                postMessageRepository.save(postMessage);
             };
             boolean autoAck = true; // auto acknowledge
             channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {

@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: 450
+      author: bart
+      dbms: PostgreSQL
+      comment: Create PostMessage
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: postmessage
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: MESSAGE
+                  type: TEXT
+              - column:
+                  name: CLIPTOPIC_NAME
+                  type: varchar(24)
+              - column:
+                  name: APIKEY
+                  type: varchar(48)
+        - rollback:
+            dropTable:
+              - tableName: postmessage
+  - changeSet:
+      id:  460
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create Apikey name index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  APIKEY
+            indexName:  idx_apikey
+            schemaName:  public
+            tableName:  postmessage
+            unique:  false
+  - changeSet:
+      id:  470
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create ClipTopic name index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  CLIPTOPIC_NAME
+            indexName:  idx_cliptopic_name
+            schemaName:  public
+            tableName:  postmessage
+            unique:  false
+

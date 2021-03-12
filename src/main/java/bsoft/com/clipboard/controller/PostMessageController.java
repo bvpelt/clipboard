@@ -103,6 +103,7 @@ public class PostMessageController {
         //
         // post message to rabbitmq with name cliptopic.name
         //
+        postMessage.setApiKey(apiKey);
         sendMessage(postMessage);
 
 
