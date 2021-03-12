@@ -28,7 +28,7 @@ public class PostMessage implements Serializable {
     private String clipTopicName; // name of the cliptopic
 
     @NotBlank
-    @Size(min = 0, max = 48)
+    @Size(min = 0, max = 36)
     @Column(name = "APIKEY")
     private String apiKey;
 

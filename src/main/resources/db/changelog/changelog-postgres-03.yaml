@@ -17,7 +17,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USER_ID
+                  name: PUBLISHER_ID
                   type: BIGINT
               - column:
                   name: CLIPTOPIC_ID
@@ -36,8 +36,8 @@ databaseChangeLog:
             columns:
               - column:
                   descending:  true
-                  name:  USER_ID
-            indexName:  idx_userid
+                  name:  PUBLISHER_ID
+            indexName:  idx_publisherid
             schemaName:  public
             tableName:  subscription
             unique:  false
@@ -53,7 +53,7 @@ databaseChangeLog:
               - column:
                   descending:  true
                   name:  CLIPTOPIC_ID
-            indexName:  idx_cliptopic_id
+            indexName:  idx_cliptopicid
             schemaName:  public
             tableName:  subscription
             unique:  false

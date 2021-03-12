@@ -3,11 +3,11 @@ databaseChangeLog:
       id: 100
       author: bart
       dbms: PostgreSQL
-      comment: Create User
+      comment: Create Publisher
       changes:
         - createTable:
             schemaName: public
-            tableName: clipuser
+            tableName: publisher
             columns:
               - column:
                   name: ID
@@ -27,18 +27,18 @@ databaseChangeLog:
                   type: varchar(128)
               - column:
                   name: STATUS
-                  type: varchar(24)
+                  type: varchar(12)
               - column:
                   name: REGISTRATIONTICKET_ID
                   type: BIGINT
         - rollback:
             dropTable:
-              - tableName: USER
+              - tableName: publisher
   - changeSet:
       id:  110
       author:  bart
       dbms: PostgreSQL
-      comment: Create user email index
+      comment: Create publisher email index
       changes:
         - createIndex:
             clustered:  true
@@ -48,7 +48,7 @@ databaseChangeLog:
                   name:  EMAIL
             indexName:  idx_email
             schemaName:  public
-            tableName:  clipuser
+            tableName:  publisher
             unique:  true
 
   - changeSet:
@@ -69,11 +69,11 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USERTICKET
-                  type: varchar(48)
+                  name: PUBLISHERTICKET
+                  type: varchar(36)
               - column:
                   name: STATUS
-                  type: varchar(24)
+                  type: varchar(12)
         - rollback:
             dropTable:
               - tableName: REGISTRATIONTICKET
@@ -82,14 +82,14 @@ databaseChangeLog:
       id:  130
       author:  bart
       dbms: PostgreSQL
-      comment: Create user userticket index
+      comment: Create registrationticket userticket index
       changes:
         - createIndex:
             clustered:  true
             columns:
               - column:
                   descending:  true
-                  name:  USERTICKET
+                  name:  PUBLISHERTICKET
             indexName:  idx_userticket
             schemaName:  public
             tableName:  registrationticket

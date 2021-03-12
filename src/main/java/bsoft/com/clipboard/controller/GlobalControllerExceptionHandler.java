@@ -15,7 +15,7 @@ public class GlobalControllerExceptionHandler {
         return new ResponseEntity<Error>(new Error(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(PublisherNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Error> userNotFound(RuntimeException ex) {
         return new ResponseEntity<Error>(new Error(ex.getMessage(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);

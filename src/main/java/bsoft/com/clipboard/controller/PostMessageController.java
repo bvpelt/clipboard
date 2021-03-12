@@ -4,7 +4,7 @@ import bsoft.com.clipboard.config.ConfigElements;
 import bsoft.com.clipboard.model.ClipTopic;
 import bsoft.com.clipboard.model.Clipboard;
 import bsoft.com.clipboard.model.PostMessage;
-import bsoft.com.clipboard.model.User;
+import bsoft.com.clipboard.model.Publisher;
 import com.rabbitmq.client.Channel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -73,11 +73,11 @@ public class PostMessageController {
         //
         // use api-key to get user
         //
-        List<User> user = clipboard.getUserFromApiKey(apiKey);
-        if ((user == null) || (user.size() != 1)) {
+        List<Publisher> publishers = clipboard.getPublisherFromApiKey(apiKey);
+        if ((publishers == null) || (publishers.size() != 1)) {
             throw new BadParameterException("Invalid API key");
         }
-        log.info("User: {}, API-key: {}", user.get(0).getName(), apiKey);
+        log.info("Publisher: {}, API-key: {}", publishers.get(0).getName(), apiKey);
 
         if ((postMessage.getMessage() == null) || (postMessage.getMessage().length() == 0)) {
             throw new BadParameterException("No message specified");
@@ -92,8 +92,8 @@ public class PostMessageController {
             throw new BadParameterException("Topic unknown");
         }
 
-        log.info("Find subscription for user: {} with topic: {}", user.get(0).getName(), postMessage.getClipTopicName());
-        boolean validSubscription = clipboard.checkSubscription(user.get(0), clipTopic.get());
+        log.info("Find subscription for user: {} with topic: {}", publishers.get(0).getName(), postMessage.getClipTopicName());
+        boolean validSubscription = clipboard.checkSubscription(publishers.get(0), clipTopic.get());
         log.info("Subscription found: {}", validSubscription);
 
         if (!validSubscription) {

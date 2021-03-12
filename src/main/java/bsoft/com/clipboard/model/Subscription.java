@@ -19,8 +19,8 @@ public class Subscription implements Serializable {
 
     //    @JsonIgnore
     @ManyToOne(optional = false)
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
+    @JoinColumn(name = "PUBLISHER_ID", nullable = false)
+    private Publisher publisher;
 
     //    @JsonIgnore
     @ManyToOne(optional = false)

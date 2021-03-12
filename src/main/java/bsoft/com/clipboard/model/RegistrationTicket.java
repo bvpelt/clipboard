@@ -26,11 +26,11 @@ public class RegistrationTicket implements Serializable {
     @Transient
     private String status;
 */
-    @Size(min = 0, max = 48)
-    @Column(name = "USERTICKET")
-    private String userTicket;
+    @Size(min = 0, max = 36)
+    @Column(name = "PUBLISHERTICKET")
+    private String publisherTicket;
 
-    @Size(min = 0, max = 24)
+    @Size(min = 0, max = 12)
     @Column(name = "STATUS")
     private String status; // values created, inactive
 

@@ -32,7 +32,7 @@ public class ClipTopicController {
 
     @Operation(summary = "Register new cliptopic")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "New user is registered",
+            @ApiResponse(responseCode = "200", description = "New cliptopic is registered",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ClipTopic.class))}),
             @ApiResponse(responseCode = "400", description = "Bad parameters",

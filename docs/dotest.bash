@@ -14,6 +14,6 @@ do
   echo $x
   content="{ \"message\": \"Vervolg message ${x}\", \"clipTopicName\": \"news\"}"
   echo $content
-  curl -v -H "x-api-key: 4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
+  curl -v -H "x-api-key: a726cd6b-cfb0-41bf-975c-897324d43be8" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
   let x=$x+1
 done

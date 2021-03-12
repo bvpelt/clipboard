@@ -1,11 +1,11 @@
 package bsoft.com.clipboard.model;
 
 import bsoft.com.clipboard.controller.BadParameterException;
-import bsoft.com.clipboard.controller.UserNotFoundException;
+import bsoft.com.clipboard.controller.PublisherNotFoundException;
 import bsoft.com.clipboard.repositories.ClipTopicRepository;
 import bsoft.com.clipboard.repositories.RegistrationTicketRepository;
 import bsoft.com.clipboard.repositories.SubscriptionRepository;
-import bsoft.com.clipboard.repositories.UserRepository;
+import bsoft.com.clipboard.repositories.PublisherRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,111 +26,111 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Clipboard {
 
-    private UserRepository userRepository;
+    private PublisherRepository publisherRepository;
     private RegistrationTicketRepository registrationTicketRepository;
     private ClipTopicRepository clipTopicRepository;
     private SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public Clipboard(final UserRepository userRepository,
+    public Clipboard(final PublisherRepository publisherRepository,
                      final RegistrationTicketRepository registrationTicketRepository,
                      final ClipTopicRepository clipTopicRepository,
                      final SubscriptionRepository subscriptionRepository) {
-        this.userRepository = userRepository;
+        this.publisherRepository = publisherRepository;
         this.registrationTicketRepository = registrationTicketRepository;
         this.clipTopicRepository = clipTopicRepository;
         this.subscriptionRepository = subscriptionRepository;
     }
 
     @Transactional
-    public List<User> getUsers() {
-        List<User> users = userRepository.findAll(Sort.by("email"));
+    public List<Publisher> getPublishers() {
+        List<Publisher> publishers = publisherRepository.findAll(Sort.by("email"));
 
-        return users;
+        return publishers;
     }
 
     @Transactional
-    public Optional<User> getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user;
+    public Optional<Publisher> getPublisherById(Long id) {
+        Optional<Publisher> publisher = publisherRepository.findById(id);
+        return publisher;
     }
 
     @Transactional
-    public List<User> getUserFromApiKey(final String apiKey) {
-        List<User> user = userRepository.findByApiKey(apiKey);
+    public List<Publisher> getPublisherFromApiKey(final String apiKey) {
+        List<Publisher> publisher = publisherRepository.findByApiKey(apiKey);
 
-        return user;
+        return publisher;
     }
 
     @Transactional
-    public void deleteUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public void deletePublisherById(Long id) {
+        Optional<Publisher> publisher = publisherRepository.findById(id);
 
-        if ((user != null) && user.isPresent()) {
-            RegistrationTicket registrationTicket = user.get().getRegistrationTicket();
+        if ((publisher != null) && publisher.isPresent()) {
+            RegistrationTicket registrationTicket = publisher.get().getRegistrationTicket();
             registrationTicket.setStatus("inactive");
             registrationTicketRepository.save(registrationTicket);
-            userRepository.deleteById(id);
+            publisherRepository.deleteById(id);
         } else {
-            throw new BadParameterException("User not found by id");
+            throw new BadParameterException("Publisher not found by id");
         }
     }
 
     @Transactional
-    public Optional<User> confirmUser(Long userId) {
-        Optional<User> user = updateUserStatus(userId, "confirmed");
-        return user;
+    public Optional<Publisher> confirmPublisher(Long publisherId) {
+        Optional<Publisher> publisher = updatePublisherStatus(publisherId, "confirmed");
+        return publisher;
     }
 
     @Transactional
-    public Optional<User> disableUser(Long userId) {
-        Optional<User> user = updateUserStatus(userId, "disabled");
-        return user;
+    public Optional<Publisher> disablePublisher(Long publisherId) {
+        Optional<Publisher> publisher = updatePublisherStatus(publisherId, "disabled");
+        return publisher;
     }
 
     @Transactional
-    public Optional<User> removeUser(Long userId) {
-        Optional<User> user = updateUserStatus(userId, "removed");
-        return user;
+    public Optional<Publisher> removePublisher(Long publisherId) {
+        Optional<Publisher> publisher = updatePublisherStatus(publisherId, "removed");
+        return publisher;
     }
 
-    private Optional<User> updateUserStatus(Long userId, final String status) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            User user1 = user.get();
-            user1.setStatus(status);
-            userRepository.save(user1);
+    private Optional<Publisher> updatePublisherStatus(Long publisherId, final String status) {
+        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
+        if (publisher.isPresent()) {
+            Publisher publisher1 = publisher.get();
+            publisher1.setStatus(status);
+            publisherRepository.save(publisher1);
         }
-        return user;
+        return publisher;
     }
 
     @Transactional
-    public User registerUser(final User user) {
+    public Publisher registerPublisher(final Publisher publisher) {
         RegistrationTicket registrationTicket = new RegistrationTicket();
 
         // Check if
-        // - the user exists by checking email adres
-        // if (user exists)
-        // - return error message - user already exists
+        // - the publisher exists by checking email adres
+        // if (publisher exists)
+        // - return error message - publisher already exists
         // else
-        // - return user
+        // - return publisher
 
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+        Optional<Publisher> optionalPublisher = publisherRepository.findByEmail(publisher.getEmail());
 
-        if ((optionalUser != null) && optionalUser.isPresent()) {
-            throw new BadParameterException(("user already exists"));
+        if ((optionalPublisher != null) && optionalPublisher.isPresent()) {
+            throw new BadParameterException(("Publisher already exists"));
         } else {
-            String newUserTicket = UUID.randomUUID().toString();
+            String newPublisherTicket = UUID.randomUUID().toString();
             registrationTicket.setStatus("created");
-            registrationTicket.setUserTicket(newUserTicket);
+            registrationTicket.setPublisherTicket(newPublisherTicket);
 
             registrationTicketRepository.save(registrationTicket);
 
-            user.setStatus("create");
-            user.setRegistrationTicket(registrationTicket);
-            userRepository.save(user);
+            publisher.setStatus("create");
+            publisher.setRegistrationTicket(registrationTicket);
+            publisherRepository.save(publisher);
         }
-        return user;
+        return publisher;
     }
 
     public ClipTopic registerClipTopic(final ClipTopic clipTopic) {
@@ -172,34 +172,21 @@ public class Clipboard {
     }
 
     @Transactional
-    public Optional<User> addUserSubscriptions(Long id, String[] names) {
-        Optional<User> user = userRepository.findById(id);
+    public Optional<Publisher> addPublisherSubscriptions(Long id, String[] names) {
+        Optional<Publisher> publisher = publisherRepository.findById(id);
 
-        if ((user != null) && user.isPresent()) {
-            User curUser = user.get();
+        if ((publisher != null) && publisher.isPresent()) {
+            Publisher curPublisher = publisher.get();
             for (int i = 0; i < names.length; i++) {
                 Optional<ClipTopic> clipTopic = clipTopicRepository.findByName(names[i]);
                 if ((clipTopic != null) && clipTopic.isPresent()) {
                     ClipTopic curClipTopic = clipTopic.get();
-                    Optional<Subscription> subscription = subscriptionRepository.findByUserAndClipTopic(curUser, curClipTopic);
+                    Optional<Subscription> subscription = subscriptionRepository.findByPublisherAndClipTopic(curPublisher, curClipTopic);
                     if (!((subscription != null) && subscription.isPresent())) {
                         Subscription newSubscription = new Subscription();
-                        newSubscription.setUser(curUser);
+                        newSubscription.setPublisher(curPublisher);
                         newSubscription.setClipTopic(curClipTopic);
-
-                        /*
-                        curUser.getSubscriptions().add(newSubscription);
-                        curClipTopic.getSubscriptions().add(newSubscription);
-
-                        userRepository.save(curUser);
-
-
-
-                        clipTopicRepository.save(curClipTopic);
-
-                         */
                         subscriptionRepository.save(newSubscription);
-
                     } else {
                         log.info("Subscription already exists, not added again");
                     }
@@ -208,9 +195,9 @@ public class Clipboard {
                 }
             }
         } else {
-            throw new UserNotFoundException("User not found");
+            throw new PublisherNotFoundException("Publisher not found");
         }
-        return user;
+        return publisher;
     }
 
     @Transactional
@@ -221,9 +208,9 @@ public class Clipboard {
     }
 
     @Transactional
-    public boolean checkSubscription(User user, ClipTopic clipTopic) {
+    public boolean checkSubscription(Publisher publisher, ClipTopic clipTopic) {
         boolean valid = true;
-        List<Subscription> subscription = subscriptionRepository.findByUserAndClipTopicName(user.getId(), clipTopic.getName());
+        List<Subscription> subscription = subscriptionRepository.findByPublisherAndClipTopicName(publisher.getId(), clipTopic.getName());
 
         if ((subscription == null) || (subscription.size() != 1)) {
             valid = false;

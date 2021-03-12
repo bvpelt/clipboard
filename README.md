@@ -116,7 +116,7 @@ WARNING: All illegal access operations will be denied in a future release
 		bsoft.com.clipboard.model.ClipTopic
 		bsoft.com.clipboard.model.RegistrationTicket
 		bsoft.com.clipboard.model.Subscription
-		bsoft.com.clipboard.model.User]
+		bsoft.com.clipboard.model.Publisher]
 	Mapping files names []
 	Properties []
 2021-03-05 20:52:47.590  INFO 8706 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.27.Final
@@ -137,11 +137,11 @@ WARNING: All illegal access operations will be denied in a future release
 ### Add user
 ```shell
 % content="{\"name\": \"mark\", \"email\": \"mark@universe.org\", \"endpoint\": \"https://mark.universe.org/news\"}"
-% curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/users
+% curl -v -H "Content-Type: application/json" -d "$content" http://localhost:8080/publishers
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
-> POST /users HTTP/1.1
+> POST /publishers HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.68.0
 > Accept: */*
@@ -153,10 +153,10 @@ WARNING: All illegal access operations will be denied in a future release
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Sat, 06 Mar 2021 19:40:45 GMT
+< Date: Fri, 12 Mar 2021 19:56:05 GMT
 < 
 * Connection #0 to host localhost left intact
-{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c","status":"created"}}
+{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"publisherTicket":"a726cd6b-cfb0-41bf-975c-897324d43be8","status":"created"}}
 ```
 ### Add topic
 ```shell
@@ -185,11 +185,11 @@ WARNING: All illegal access operations will be denied in a future release
 ```
 ### Add subscription
 ```shell
-% curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/users/1/subscriptions?names=news
+% curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/publishers/1/subscriptions?names=news
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
-> PUT /users/1/subscriptions?names=news HTTP/1.1
+> PUT /publishers/1/subscriptions?names=news HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.68.0
 > Accept: */*
@@ -199,16 +199,19 @@ WARNING: All illegal access operations will be denied in a future release
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Sat, 06 Mar 2021 19:45:56 GMT
+< Date: Fri, 12 Mar 2021 19:57:58 GMT
 < 
 * Connection #0 to host localhost left intact
-{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"userTicket":"4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c","status":"created"}}
+{"id":1,"name":"mark","email":"mark@universe.org","endpoint":"https://mark.universe.org/news","status":"create","registrationTicket":{"publisherTicket":"a726cd6b-cfb0-41bf-975c-897324d43be8","status":"created"}}
+
+% curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/publishers/1/subscriptions?names=sport
+% curl -v -X PUT -H "Content-Type: application/json"  http://localhost:8080/publishers/1/subscriptions?names=finance
 ```
 ### Post a message
 In posting a message the registration key from the user is used as api-key.
 ```shell
 % content="{ \"message\": \"Test message\", \"clipTopicName\": \"news\"}"
-% curl -v -H "x-api-key: 4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
+% curl -v -H "x-api-key: a726cd6b-cfb0-41bf-975c-897324d43be8" -H "Content-type: application/json" -d "$content" http://localhost:8080/postmessage
 *   Trying 127.0.0.1:8080...
 * TCP_NODELAY set
 * Connected to localhost (127.0.0.1) port 8080 (#0)
@@ -216,7 +219,7 @@ In posting a message the registration key from the user is used as api-key.
 > Host: localhost:8080
 > User-Agent: curl/7.68.0
 > Accept: */*
-> x-api-key: 4989f3cd-84b4-4e0a-a4f0-3fb0b9c7ea9c
+> x-api-key: a726cd6b-cfb0-41bf-975c-897324d43be8
 > Content-type: application/json
 > Content-Length: 53
 > 
@@ -225,10 +228,10 @@ In posting a message the registration key from the user is used as api-key.
 < HTTP/1.1 200 
 < Content-Type: application/json
 < Transfer-Encoding: chunked
-< Date: Sat, 06 Mar 2021 19:49:05 GMT
+< Date: Fri, 12 Mar 2021 20:01:17 GMT
 < 
 * Connection #0 to host localhost left intact
-{"message":"Test message","clipTopicName":"news"}
+{"id":null,"message":"Test message","clipTopicName":"news","apiKey":"a726cd6b-cfb0-41bf-975c-897324d43be8"}
 ```
 ### Start test
 Use the testscript to send x messages.
