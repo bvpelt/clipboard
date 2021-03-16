@@ -53,6 +53,8 @@ if not first time
 ```shell
 # docker-compose start
 ```
+## Java packages
+- see https://repository.sonatype.org/
 
 ## References
 - see [Rabbit MQ Tutorial](https://www.rabbitmq.com/tutorials/tutorial-three-java.html)

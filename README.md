@@ -113,10 +113,10 @@ WARNING: All illegal access operations will be denied in a future release
 	Validation Mode: AUTO
 	Jar files URLs []
 	Managed classes names [
-		bsoft.com.clipboard.model.ClipTopic
-		bsoft.com.clipboard.model.RegistrationTicket
-		bsoft.com.clipboard.model.Subscription
-		bsoft.com.clipboard.model.Publisher]
+		bsoft.com.clipboard.storage.model.ClipTopic
+		bsoft.com.clipboard.storage.model.RegistrationTicket
+		bsoft.com.clipboard.storage.model.Subscription
+		bsoft.com.clipboard.storage.model.Publisher]
 	Mapping files names []
 	Properties []
 2021-03-05 20:52:47.590  INFO 8706 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.27.Final
@@ -125,7 +125,7 @@ WARNING: All illegal access operations will be denied in a future release
 2021-03-05 20:52:47.680  INFO 8706 --- [  restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL81Dialect
 2021-03-05 20:52:47.900  INFO 8706 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
 2021-03-05 20:52:48.137  INFO 8706 --- [  restartedMain] b.c.c.config.RabbitConfiguration         : Channel created
-2021-03-05 20:52:48.156  INFO 8706 --- [  restartedMain] bsoft.com.clipboard.listener.Receiver    : Receiver - Waiting for messages
+2021-03-05 20:52:48.156  INFO 8706 --- [  restartedMain] bsoft.com.clipboard.application.listener.Receiver    : Receiver - Waiting for messages
 2021-03-05 20:52:48.214  WARN 8706 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2021-03-05 20:52:48.275  INFO 8706 --- [  restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
 2021-03-05 20:52:48.601  INFO 8706 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
@@ -238,4 +238,9 @@ Use the testscript to send x messages.
 If no arument is specified 100 messages will be send.
 ```shell
 # docs/dotest.bash 20
+```
+
+# Build
+```shell
+% mvn clean build
 ```
