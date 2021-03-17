@@ -1,5 +1,6 @@
 package bsoft.com.clipboard.application.listener;
 
+import bsoft.com.clipboard.storage.config.StorageConfig;
 import bsoft.com.clipboard.storage.model.PostMessage;
 import bsoft.com.clipboard.storage.repositories.PostMessageRepository;
 import com.rabbitmq.client.Channel;
@@ -18,11 +19,11 @@ public class ReaderTask implements Runnable {
     public ReaderTask(final Channel channel,
                       final String exchangeName,
                       final String readerName,
-                      final PostMessageRepository postMessageRepository) {
+                      final StorageConfig storageConfig) {
         this.channel = channel;
         this.exchangeName = exchangeName;
         this.readerName = readerName;
-        this.postMessageRepository = postMessageRepository;
+        this.postMessageRepository = storageConfig.getPostMessageRepository();
     }
 
     public void run() {

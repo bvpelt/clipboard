@@ -1,4 +1,4 @@
-package bsoft.com.clipboard.application.controller;
+package bsoft.com.clipboard.storage.service;
 
 public class BadParameterException extends RuntimeException {
 

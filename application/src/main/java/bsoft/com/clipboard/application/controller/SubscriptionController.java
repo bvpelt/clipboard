@@ -1,7 +1,7 @@
 package bsoft.com.clipboard.application.controller;
 
 
-import bsoft.com.clipboard.application.model.Clipboard;
+import bsoft.com.clipboard.storage.service.Clipboard;
 import bsoft.com.clipboard.storage.model.Subscription;
 import bsoft.com.clipboard.storage.model.SubscriptionList;
 import io.swagger.v3.oas.annotations.Operation;

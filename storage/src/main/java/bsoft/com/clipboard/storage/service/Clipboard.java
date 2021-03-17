@@ -1,7 +1,6 @@
-package bsoft.com.clipboard.application.model;
+package bsoft.com.clipboard.storage.service;
 
-import bsoft.com.clipboard.application.controller.BadParameterException;
-import bsoft.com.clipboard.application.controller.PublisherNotFoundException;
+import bsoft.com.clipboard.storage.config.StorageConfig;
 import bsoft.com.clipboard.storage.model.ClipTopic;
 import bsoft.com.clipboard.storage.model.Publisher;
 import bsoft.com.clipboard.storage.model.RegistrationTicket;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@Component
+@Service
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,14 +36,11 @@ public class Clipboard {
     private SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public Clipboard(final PublisherRepository publisherRepository,
-                     final RegistrationTicketRepository registrationTicketRepository,
-                     final ClipTopicRepository clipTopicRepository,
-                     final SubscriptionRepository subscriptionRepository) {
-        this.publisherRepository = publisherRepository;
-        this.registrationTicketRepository = registrationTicketRepository;
-        this.clipTopicRepository = clipTopicRepository;
-        this.subscriptionRepository = subscriptionRepository;
+    public Clipboard(final StorageConfig storageConfig) {
+        this.publisherRepository = storageConfig.getPublisherRepository();
+        this.registrationTicketRepository = storageConfig.getRegistrationTicketRepository();
+        this.clipTopicRepository = storageConfig.getClipTopicRepository();
+        this.subscriptionRepository = storageConfig.getSubscriptionRepository();
     }
 
     @Transactional

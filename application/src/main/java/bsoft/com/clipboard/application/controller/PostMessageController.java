@@ -1,7 +1,8 @@
 package bsoft.com.clipboard.application.controller;
 
 import bsoft.com.clipboard.application.config.ConfigElements;
-import bsoft.com.clipboard.application.model.Clipboard;
+import bsoft.com.clipboard.storage.service.BadParameterException;
+import bsoft.com.clipboard.storage.service.Clipboard;
 import bsoft.com.clipboard.storage.model.ClipTopic;
 
 import bsoft.com.clipboard.storage.model.PostMessage;

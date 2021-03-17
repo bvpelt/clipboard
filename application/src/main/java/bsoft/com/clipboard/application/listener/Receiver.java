@@ -1,6 +1,9 @@
 package bsoft.com.clipboard.application.listener;
 
 import bsoft.com.clipboard.application.config.ConfigElements;
+
+import bsoft.com.clipboard.storage.config.StorageConfig;
+
 import bsoft.com.clipboard.storage.repositories.PostMessageRepository;
 import com.rabbitmq.client.Channel;
 import liquibase.pro.packaged.A;
@@ -22,20 +25,20 @@ public class Receiver {
     private Channel channel;
 
     @Autowired
-    private  PostMessageRepository postMessageRepository;
+    private StorageConfig storageConfig;
 
 
     public Receiver() {
         // this.postMessageRepository = postMessageRepository;
+
     }
 
     @Bean
-    @DependsOn({"postMessageRepository"})
     public Receiver newsReceiver(@Value("${news.reader}") final int maxReader) {
         ReaderTask[] readerTasks = new ReaderTask[maxReader];
 
         for (int i = 0; i < maxReader; i++) {
-            readerTasks[i] = new ReaderTask(channel, configElements.getNewsExchanges(), "News", postMessageRepository);
+            readerTasks[i] = new ReaderTask(channel, configElements.getNewsExchanges(), "News", storageConfig);
             readerTasks[i].run();
         }
         return this;
@@ -46,7 +49,7 @@ public class Receiver {
         ReaderTask[] readerTasks = new ReaderTask[maxReader];
 
         for (int i = 0; i < maxReader; i++) {
-            readerTasks[i] = new ReaderTask(channel, configElements.getSportExchanges(), "Sport", postMessageRepository);
+            readerTasks[i] = new ReaderTask(channel, configElements.getSportExchanges(), "Sport", storageConfig);
             readerTasks[i].run();
         }
         return this;
@@ -57,7 +60,7 @@ public class Receiver {
         ReaderTask[] readerTasks = new ReaderTask[maxReader];
 
         for (int i = 0; i < maxReader; i++) {
-            readerTasks[i] = new ReaderTask(channel, configElements.getFinanceExchanges(), "Finance", postMessageRepository);
+            readerTasks[i] = new ReaderTask(channel, configElements.getFinanceExchanges(), "Finance", storageConfig);
             readerTasks[i].run();
         }
         return this;
