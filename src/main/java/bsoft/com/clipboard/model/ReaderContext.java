@@ -1,6 +1,5 @@
 package bsoft.com.clipboard.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -8,13 +7,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
-@Entity(name = "ClipTopic")
-@Table(name = "cliptopic")
-public class ClipTopic implements Serializable {
-
+@Entity(name = "ReaderContext")
+@Table(name = "readercontext")
+public class ReaderContext  implements Serializable {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
@@ -23,14 +20,10 @@ public class ClipTopic implements Serializable {
 
     @NotBlank
     @Size(min = 0, max = 24)
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "CONTEXT_NAME")
+    private String contextName; // valid names "reader"
 
-    @Size(min = 0, max = 128)
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name = "LASTID")
+    private Long lastId;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "clipTopic", fetch = FetchType.LAZY)
-    Set<Subscription> subscriptions;
 }

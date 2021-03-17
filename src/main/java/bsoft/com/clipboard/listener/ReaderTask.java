@@ -38,11 +38,13 @@ public class ReaderTask implements Runnable {
                 PostMessage postMessage = null;
                 try {
                     postMessage = (PostMessage) PostMessage.byteToObj(delivery.getBody());
+                    postMessageRepository.save(postMessage);
                 } catch (ClassNotFoundException e) {
                     log.error("Could not convert data");
+                } catch (Exception e) {
+                    log.error("Unexpected error: {}", e);
                 }
                 log.info("{} Receiver received topic:{} from {}:  {}", readerName, postMessage.getClipTopicName(), postMessage.getApiKey(), postMessage.getMessage());
-                postMessageRepository.save(postMessage);
             };
             boolean autoAck = true; // auto acknowledge
             channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {

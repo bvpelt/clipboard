@@ -21,11 +21,6 @@ public class RegistrationTicket implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    /*
-    @JsonInclude
-    @Transient
-    private String status;
-*/
     @Size(min = 0, max = 36)
     @Column(name = "PUBLISHERTICKET")
     private String publisherTicket;
@@ -34,9 +29,5 @@ public class RegistrationTicket implements Serializable {
     @Column(name = "STATUS")
     private String status; // values created, inactive
 
-    /*
-    @JsonInclude
-    @Transient
-    private String errorMessage;
-*/
+
 }

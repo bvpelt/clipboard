@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 500
+      author: bart
+      dbms: PostgreSQL
+      comment: Create PostMessage
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: readercontext
+            columns:
+              - column:
+                  name: ID
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: CONTEXT_NAME
+                  type: varchar(24)
+              - column:
+                  name: LASTID
+                  type: BIGINT
+        - rollback:
+            dropTable:
+              - tableName: readercontext
+  - changeSet:
+      id:  510
+      author:  bart
+      dbms: PostgreSQL
+      comment: Create contextname index
+      changes:
+        - createIndex:
+            clustered:  true
+            columns:
+              - column:
+                  descending:  true
+                  name:  CONTEXT_NAME
+            indexName:  idx_contextname
+            schemaName:  public
+            tableName:  readercontext
+            unique:  true
+
+
