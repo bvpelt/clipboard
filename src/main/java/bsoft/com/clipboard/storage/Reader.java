@@ -2,12 +2,17 @@ package bsoft.com.clipboard.storage;
 
 import bsoft.com.clipboard.repositories.PostMessageRepository;
 import bsoft.com.clipboard.repositories.ReaderContextRepository;
+import liquibase.pro.packaged.A;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Slf4j
 @Getter
@@ -15,8 +20,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Reader {
 
-    private  int maxReader = 1;
+    private int maxReader = 1;
     private StorageReaderTask[] storageReaderTasks;
+    private boolean executorStarted = false;
 
     @Autowired
     private PostMessageRepository postMessageRepository;
@@ -24,23 +30,35 @@ public class Reader {
     @Autowired
     private ReaderContextRepository readerContextRepository;
 
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
     @Bean
     public Reader getReader() {
+
         storageReaderTasks = new StorageReaderTask[maxReader];
-        for (int i = 0; i < maxReader; i++) {
-            storageReaderTasks[i] = new StorageReaderTask(postMessageRepository, readerContextRepository);
-            //storageReaderTasks[i].run();
-        }
 
         return this;
     }
 
     public int startReaders() {
         int numberStarted = 0;
+        String name;
 
         for (int i = 0; i < maxReader; i++) {
-            storageReaderTasks[i].run();
+            name = "StorageReaderTask_" + i;
+
+            if (storageReaderTasks[i] == null) {
+                storageReaderTasks[i] = (StorageReaderTask) applicationContext.getBean("storageReaderTask");
+                storageReaderTasks[i].setName(name);
+            }
             storageReaderTasks[i].setGoOn(true);
+            taskExecutor.execute(storageReaderTasks[i]);
+            executorStarted = true;
+
             numberStarted++;
         }
 
@@ -53,6 +71,11 @@ public class Reader {
             storageReaderTasks[i].setGoOn(false);
             numberStopped++;
         }
+
+        for (int i = 0; i < maxReader; i++) {
+            storageReaderTasks[i] = null;
+        }
+
         return numberStopped;
     }
 }

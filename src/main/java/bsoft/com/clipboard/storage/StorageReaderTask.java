@@ -5,26 +5,34 @@ import bsoft.com.clipboard.model.PostMessage;
 import bsoft.com.clipboard.model.ReaderContext;
 import bsoft.com.clipboard.repositories.PostMessageRepository;
 import bsoft.com.clipboard.repositories.ReaderContextRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rabbitmq.client.Channel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Service
+@Component
 @Getter
 @Setter
-public class StorageReaderTask implements Runnable {
+@Scope("prototype")
+public class StorageReaderTask implements Runnable, Serializable {
 
     private final PostMessageRepository postMessageRepository;
+
     private final  ReaderContextRepository readerContextRepository;
+
     private boolean goOn = true;
     private long interval = 10000L;
+    private String name;
 
     public StorageReaderTask(final PostMessageRepository postMessageRepository,
                              final ReaderContextRepository readerContextRepository) {
@@ -32,6 +40,7 @@ public class StorageReaderTask implements Runnable {
         this.readerContextRepository = readerContextRepository;
     }
 
+    @Override
     public void run() {
         log.info("Started ReaderTask");
         String contextName = "reader";
