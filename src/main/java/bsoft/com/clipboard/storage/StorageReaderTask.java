@@ -5,14 +5,11 @@ import bsoft.com.clipboard.model.PostMessage;
 import bsoft.com.clipboard.model.ReaderContext;
 import bsoft.com.clipboard.repositories.PostMessageRepository;
 import bsoft.com.clipboard.repositories.ReaderContextRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rabbitmq.client.Channel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.Serializable;
@@ -28,11 +25,12 @@ public class StorageReaderTask implements Runnable, Serializable {
 
     private final PostMessageRepository postMessageRepository;
 
-    private final  ReaderContextRepository readerContextRepository;
+    private final ReaderContextRepository readerContextRepository;
 
     private boolean goOn = true;
     private long interval = 10000L;
     private String name;
+    private long msgProcessed = 0L;
 
     public StorageReaderTask(final PostMessageRepository postMessageRepository,
                              final ReaderContextRepository readerContextRepository) {
@@ -46,7 +44,7 @@ public class StorageReaderTask implements Runnable, Serializable {
         String contextName = "reader";
 
         try {
-            while(goOn) {
+            while (goOn) {
                 log.info("Start processing");
                 checkReaderContext(contextName);
                 boolean recordFound = true;
@@ -62,7 +60,7 @@ public class StorageReaderTask implements Runnable, Serializable {
                 log.info("Start waiting");
                 Thread.sleep(interval);
             }
-            log.info("Stopped processing");
+            log.info("Stopped processing - closing thread");
         } catch (Exception ex) {
             log.error("Error during processing: {}", ex);
         }
@@ -70,7 +68,7 @@ public class StorageReaderTask implements Runnable, Serializable {
 
     @Transactional
     public boolean procesRecord(final String contextName) {
-        boolean goOn = false;
+        boolean recordFound = false;
         ReaderContext readerContext;
 
         readerContext = getLastId(contextName);
@@ -81,18 +79,19 @@ public class StorageReaderTask implements Runnable, Serializable {
             // process post message
             if ((postMessages != null) && (postMessages.size() == 1)) {
                 PostMessage postMessage = postMessages.get(0);
-                log.info("Processing id: {}", postMessage.getId());
+                log.info("Processing id: {} in thread: {}", postMessage.getId(), name);
 
                 readerContext.setLastId(readerContext.getLastId() + 1);
                 readerContextRepository.save(readerContext);
-                goOn = true;
+                recordFound = true;
+                msgProcessed++;
             }
         }
-        return goOn;
+        return recordFound;
     }
 
     private ReaderContext getLastId(final String contextName) {
-        ReaderContext lastContext= null;
+        ReaderContext lastContext = null;
 
         Optional<ReaderContext> readerContextOptional = readerContextRepository.findByContextName(contextName);
         boolean found = true;

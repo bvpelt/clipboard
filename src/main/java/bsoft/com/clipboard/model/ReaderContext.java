@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity(name = "ReaderContext")
 @Table(name = "readercontext")
-public class ReaderContext  implements Serializable {
+public class ReaderContext implements Serializable {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")

@@ -22,30 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Clipboard API",
-                version = "0.1",
-                description = "The clipboard API provides an API to let clients send messages"
-                        + " It is designed to support both administration of publishers/topics and subscriptions",
-                contact = @Contact(
-                        name = "Bart van Pelt",
-                        email = "brtvnplt@gmail.com"
-                ),
-                license = @License(
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.html",
-                        name = "Apache 2.0"
-                )
-        )
-)
-
 @RestController
 @Slf4j
 @NoArgsConstructor
 public class ReaderController {
 
     private Reader reader;
-
 
     @Autowired
     public ReaderController(final Reader reader) {
@@ -72,6 +54,7 @@ public class ReaderController {
                 taskInfos[i].setInterval(tasklist[i].getInterval());
                 taskInfos[i].setName(tasklist[i].getName());
                 taskInfos[i].setGoOn(tasklist[i].isGoOn());
+                taskInfos[i].setMsgProcessed(tasklist[i].getMsgProcessed());
             }
         }
         result.setTaskInfos(taskInfos);

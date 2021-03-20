@@ -2,7 +2,6 @@ package bsoft.com.clipboard.storage;
 
 import bsoft.com.clipboard.repositories.PostMessageRepository;
 import bsoft.com.clipboard.repositories.ReaderContextRepository;
-import liquibase.pro.packaged.A;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,29 +11,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 @Slf4j
 @Getter
 @Setter
 @Configuration
 public class Reader {
 
-    private int maxReader = 1;
-    private StorageReaderTask[] storageReaderTasks;
-    private boolean executorStarted = false;
-
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private PostMessageRepository postMessageRepository;
-
     @Autowired
     private ReaderContextRepository readerContextRepository;
-
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
 
-    @Autowired
-    ApplicationContext applicationContext;
+    private int maxReader = 3;
+    private StorageReaderTask[] storageReaderTasks;
+    private boolean executorStarted = false;
 
     @Bean
     public Reader getReader() {

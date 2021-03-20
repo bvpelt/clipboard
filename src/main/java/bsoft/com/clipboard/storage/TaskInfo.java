@@ -11,4 +11,5 @@ public class TaskInfo implements Serializable {
     private boolean goOn;
     private long interval;
     private String name;
+    private long msgProcessed;
 }
