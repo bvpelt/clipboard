@@ -6,6 +6,8 @@ import bsoft.com.clipboard.model.ReaderContext;
 import bsoft.com.clipboard.repositories.PostMessageRepository;
 import bsoft.com.clipboard.repositories.ReaderContextRepository;
 import com.rabbitmq.client.Channel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Getter
+@Setter
 public class StorageReaderTask implements Runnable {
 
     private final PostMessageRepository postMessageRepository;
@@ -29,17 +33,18 @@ public class StorageReaderTask implements Runnable {
     }
 
     public void run() {
-        log.info("{} started ReaderTask");
-
+        log.info("Started ReaderTask");
         String contextName = "reader";
-        checkReaderContext(contextName);
 
         try {
             while(goOn) {
                 log.info("Start processing");
-                while (goOn) {
+                checkReaderContext(contextName);
+                boolean recordFound = true;
+
+                while (recordFound && goOn) {
                     try {
-                        goOn = procesRecord(contextName);
+                        recordFound = procesRecord(contextName);
                     } catch (Exception e) {
                         log.error("Error processing message: {}", e);
                         goOn = false;
@@ -47,8 +52,8 @@ public class StorageReaderTask implements Runnable {
                 }
                 log.info("Start waiting");
                 Thread.sleep(interval);
-                goOn = true;
             }
+            log.info("Stopped processing");
         } catch (Exception ex) {
             log.error("Error during processing: {}", ex);
         }

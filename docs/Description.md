@@ -58,3 +58,4 @@ if not first time
 - see [Rabbit MQ Tutorial](https://www.rabbitmq.com/tutorials/tutorial-three-java.html)
 - see [Article link from Tony Sloos](http://itsystemengineer.blogspot.com/2018/02/java-ee-7-startup-singleton-rabbitmq.html)
 - see [API spec inspiration](https://cloud.google.com/pubsub?hl=nl)
+- see [Threads](https://mkyong.com/spring/spring-and-java-thread-example/)
