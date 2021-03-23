@@ -64,14 +64,13 @@ public class ReceiveMessageController {
                                                    @RequestHeader("x-api-key") String apiKey) {
         log.info("ReceiveMessageController received message x-api-key: {}, name: {}, message: {}", apiKey, postMessage.getClipTopicName(), postMessage.getMessage());
         ResponseEntity<PostMessage> clipTopicResponse = ResponseEntity.ok(postMessage);
-
-        /*
+        
         if ((apiKey == null) || (apiKey.length() == 0)) {
             throw new BadParameterException("API Key required");
         }
         log.info("Valid api key: {}", apiKey);
-*/
-        log.info("Received message: {}", postMessage.toString());
+
+        log.info("Received message: {} with status: {}", postMessage.getId(), postMessage.toString());
 
         return clipTopicResponse;
     }
