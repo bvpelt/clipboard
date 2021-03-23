@@ -1,5 +1,6 @@
 package bsoft.com.clipboard.model;
 
+
 import bsoft.com.clipboard.controller.BadParameterException;
 import bsoft.com.clipboard.controller.PublisherNotFoundException;
 import bsoft.com.clipboard.repositories.ClipTopicRepository;

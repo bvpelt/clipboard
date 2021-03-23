@@ -85,7 +85,7 @@ public class Reader {
         }
 
         taskExecutor.getThreadPoolExecutor().purge();
-        taskExecutor.
+
 
         log.info("After stop readers - Thread pool executor - core poolsize: {}, max poolsize: {}, poolsize: {}, largest poolsize: {}", taskExecutor.getThreadPoolExecutor().getCorePoolSize(),
                 taskExecutor.getThreadPoolExecutor().getMaximumPoolSize(),
