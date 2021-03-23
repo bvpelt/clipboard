@@ -5,7 +5,11 @@ import bsoft.com.clipboard.repositories.PostMessageRepository;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -54,4 +58,5 @@ public class ReaderTask implements Runnable {
         }
         log.info("{} stopped", readerName);
     }
+
 }
