@@ -16,7 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<liquibase.version>4.2.2</liquibase.version>
+		<liquibase.version>4.8.0</liquibase.version>
 		<openapitools.version>4.3.0</openapitools.version>
 		<springdoc.version>1.5.4</springdoc.version>
 	</properties>
